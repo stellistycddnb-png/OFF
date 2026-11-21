@@ -76,7 +76,7 @@ const CHAT_T = {
   smoke: {n: '🚬 Перекурить', fx: {energy: 6}, l: ['{n} протягивает зажигалку: «Пять минут жизни».', '{n}: «Давай постоим тут. Хоть не слышно звонков».', '{n} молчит и смотрит вдаль. Вы тоже.']},
   loan: {n: '💸 Занять ₴200', fx: {money: 200, boss: -1, cons: -1}, l: ['{n}: «Держи. Но верни, ладно?»', '{n} достаёт купюры: «Только не рассказывай».', '{n}: «Ну… выручу. Один раз».']}
 };
-const REL_PERK = ['Дима: +₴80 в день', 'Катя: +1 совесть в день', 'Рома: +1 к расположению босса', 'Палыч: −2 к риску в день', 'Сергей: +3 к энергии'];
+const REL_PERK = ['Дима: +₴80 в день', 'Катя: +1 совесть в день', 'Рома: +1 к расположению босса', 'Гриша: −2 к риску в день', 'Сергей: +3 к энергии'];
 const X0 = () => {if (!S.rel) S.rel = {}; if (!S.chats) S.chats = 0; return S;};
 function teamDaily() {X0(); S.chats = 0; TEAM.forEach((t, i) => {if ((S.rel[t.n] || 0) >= 4) {if (i === 0) S.money += 80; if (i === 1) S.cons = clamp(S.cons + 1, 0, 100); if (i === 2) S.boss = clamp(S.boss + 1, 0, 100); if (i === 3) S.heat = clamp(S.heat - 2, 0, 100); if (i === 4) S.energy = clamp(S.energy + 3, 0, 100);}});}
 function scrChat(i, last) {
@@ -88,7 +88,7 @@ function scrNews() {
   showScr('<div class="box"><h2>📰 Что нового</h2><p style="color:#ff7adf;font-weight:800">' + UPD + ' · ' + BUILD + '</p>' +
   '<h3>В этом обновлении</h3><p>• Новое главное меню с анимированным городом и отдельный раздел «Разработчик»<br>• Это окно «Что нового» — теперь вы всегда в курсе<br>• ~20 новых звуков: двери, монеты, печать, сердце, мотор, питомцы, сирена, фоновый шум офиса<br>• Новые действия в разговоре: «❓ Спросить» (узнать о человеке и использовать это) и «🤐 Пауза»<br>• Живые вставки: собеседники отвлекаются, переспрашивают, шумят<br>• Разговоры с коллегами: советы, сплетни, перекур, долг. Накопите доверие — получите бонус<br>• Новые дилеммы и события, больше реплик на каждом этапе разговора</p>' +
   '<h3>Ранее</h3><p>• Дом: мебель, одежда, транспорт и вечера дома<br>• HR-девушки: трудно расположить, давление приводит к жалобе<br>• «Мусор» звонит как «полицейский» с выдуманными делами<br>• Диалоги по этапам: Знакомство → Крючок → Просьба → Закрытие<br>• Быт, питомцы, достижения, карьерная лестница, обновление поверх установки</p>' +
-  '<div class="row" style="margin-top:8px"><button class="btn pri" data-a="x_close">Понятно</button></div></div>', true); lsSet('cc_news_107', 1);
+  '<div class="row" style="margin-top:8px"><button class="btn pri" data-a="x_close">Понятно</button></div></div>', true); lsSet('cc_news_108', 1);
 }
 function scrDev() {
   showScr('<div class="box" style="text-align:center"><div style="font:900 34px Impact,sans-serif;letter-spacing:.1em;color:#eee;text-shadow:0 0 18px #ff3ac8">PESSIMIST</div><p style="letter-spacing:.3em;font-size:11px;color:#9a8a70">MADE BY</p><p>Разработчик игры «Кол-центр: Смена»</p><div class="col" style="margin:10px 0"><a class="btn pri" style="text-decoration:none;color:#201400" href="https://t.me/+OlavQF1edndlOWY1" target="_blank" rel="noopener">📢 Канал: t.me/+OlavQF1edndlOWY1</a><a class="btn" style="text-decoration:none" href="https://t.me/Izzolentaaa" target="_blank" rel="noopener">✉ Telegram: @Izzolentaaa</a></div><p style="font-size:12px;color:#9a8fb8">Игра сатирическая: она показывает, какую цену платят живые люди. Все компании и «легенды» выдуманы.</p><div class="row" style="margin-top:8px;justify-content:center"><button class="btn pri" data-a="x_close">Закрыть</button></div></div>', true);

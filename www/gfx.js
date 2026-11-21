@@ -42,7 +42,7 @@ const Gfx = (() => {
     const bx = w * .66, by = h * .12, bw = w * .3, bh = h * .6; g.fillStyle = 'rgba(160,210,230,.18)'; rr(g, bx, by, bw, bh, 4); g.fill(); person(g, bx + bw / 2, by + bh * .5, 1.4, '#e0b090', '#1b1f2a', t, 0, false); g.fillStyle = '#c33'; g.fillRect(bx + bw / 2 - 1.5, by + bh * .5 + 4, 3, 12);
     g.strokeStyle = '#9bb'; g.lineWidth = 3; rr(g, bx, by, bw, bh, 4); g.stroke(); g.fillStyle = '#222'; g.font = '700 ' + Math.round(h * .03) + 'px sans-serif'; g.fillText('ДИРЕКТОР', bx + bw / 2, by + bh + 12);
     // коллеги по лестнице
-    const cols = [['#e0b090', '#7a5ac8', 'cold1', 'Дима'], ['#b98c6c', '#c8507a', 'cold2', 'Катя'], ['#f0c8a8', '#2a6a9a', 'closer', 'Рома'], ['#d8b090', '#3a4a3a', 'musor', 'Палыч'], ['#e0c0a0', '#202020', 'pult', 'Сергей']];
+    const cols = [['#e0b090', '#7a5ac8', 'cold1', 'Дима'], ['#b98c6c', '#c8507a', 'cold2', 'Катя'], ['#f0c8a8', '#2a6a9a', 'closer', 'Рома'], ['#d8b090', '#3a4a3a', 'musor', 'Гриша'], ['#e0c0a0', '#202020', 'pult', 'Сергей']];
     cols.forEach((c, i) => {
       const x = w * (.075 + i * .135), y = h * .43, sc = Math.min(1.1, w / 420); person(g, x, y, sc, c[0], c[1], t, i * 2, i < 3);
       if (i === 3) {g.fillStyle = '#1c2c5a'; rr(g, x - 9 * sc, y - 19 * sc, 18 * sc, 6 * sc, 2); g.fill(); g.fillRect(x - 11 * sc, y - 14 * sc, 22 * sc, 2 * sc); circ(g, x, y - 17 * sc, 1.6 * sc, '#ffd23a');}
@@ -50,6 +50,14 @@ const Gfx = (() => {
       g.fillStyle = '#6a4a2c'; g.fillRect(x - 22 * sc, y + 24 * sc, 44 * sc, 6 * sc);
       const me = i === S.rank; g.fillStyle = me ? '#ffd23a' : 'rgba(10,8,24,.8)'; const fs = Math.max(8, Math.round(h * .05)); g.font = '700 ' + fs + 'px sans-serif'; g.textAlign = 'center'; const label = (me ? '▶ ' : '') + c[3]; const tw = g.measureText(label).width + 8; rr(g, x - tw / 2, y + 31 * sc, tw, fs + 4, 4); g.fill(); g.fillStyle = me ? '#201400' : '#e8e0ff'; g.fillText(label, x, y + 31 * sc + fs);
     });
+    // ваш персонаж (build 1.0.8)
+    {const o = S.out || [0, 0, 0], i = S.rank || 0, sc = Math.min(1.2, w / 400) * 1.1, x = w * (.075 + i * .135) + w * .062, y = h * .46;
+      const shirts = ['#6a6a78', '#e8e8f0', '#2a2f4a', '#12121c'];
+      person(g, x, y, sc, '#e8b898', shirts[o[0] || 0], t, i * 2 + 1, i < 3);
+      if (o[0] >= 2) {g.fillStyle = '#c33'; g.fillRect(x - 1.2 * sc, y + 2 * sc, 2.4 * sc, 12 * sc);}
+      g.fillStyle = ['#e8e8e8', '#5a3a22', '#101010'][o[1] || 0]; rr(g, x - 9 * sc, y + 22 * sc, 18 * sc, 4 * sc, 2); g.fill();
+      if (o[2] === 1 || o[2] === 3) circ(g, x + 9 * sc, y + 14 * sc, 2.2 * sc, '#cfd8e0'); if (o[2] === 2) {g.strokeStyle = '#ffd23a'; g.lineWidth = 1.6 * sc; g.beginPath(); g.arc(x, y + 4 * sc, 6 * sc, .2, Math.PI - .2); g.stroke();}
+      const nk = '★ ' + (S.nick || 'ВЫ'), fs = Math.max(8, Math.round(h * .045)); g.font = '800 ' + fs + 'px sans-serif'; g.textAlign = 'center'; const tw = g.measureText(nk).width + 8; rr(g, x - tw / 2, y - 26 * sc, tw, fs + 4, 4); g.fillStyle = '#ffd23a'; g.fill(); g.fillStyle = '#201400'; g.fillText(nk, x, y - 26 * sc + fs);}
     // ваш стол
     const dy = h * .8; const dg = g.createLinearGradient(0, dy, 0, h); dg.addColorStop(0, '#7a5230'); dg.addColorStop(1, '#4e321c'); g.fillStyle = dg; g.fillRect(0, dy, w, h - dy);
     g.fillStyle = '#222'; rr(g, w * .38, dy - h * .085, w * .26, h * .105, 4); g.fill(); g.fillStyle = 'rgba(110,255,170,' + (.55 + Math.sin(t * 3) * .1) + ')'; g.fillRect(w * .39, dy - h * .075, w * .24, h * .075);
@@ -91,7 +99,7 @@ const Gfx = (() => {
     const c = mk(w, h), g = c.getContext('2d'), bg = g.createLinearGradient(0, 0, 0, h); bg.addColorStop(0, '#1a0c3a'); bg.addColorStop(.6, '#2a1050'); bg.addColorStop(1, '#0c0618'); g.fillStyle = bg; g.fillRect(0, 0, w, h);
     const s = Math.min(w / 460, h / 800); for (let i = 0; i < 60; i++) {g.fillStyle = 'rgba(255,255,255,' + (.15 + (i * 37 % 10) / 20) + ')'; g.fillRect((i * 97 % 100) / 100 * w, (i * 53 % 100) / 100 * h * .7, 2, 2);}
     headset(g, w / 2, h * .3, 70 * s, '#ffd23a'); logoText(g, w / 2, h * .5, s);
-    if (txt) {g.textAlign = 'center'; g.fillStyle = '#ffd7a0'; g.font = '700 ' + 20 * s + 'px sans-serif'; g.fillText('MADE BY PESSIMIST', w / 2, h * .6); g.fillStyle = '#ff7adf'; g.font = '800 ' + 16 * s + 'px Impact,sans-serif'; g.fillText('БОЛЬШАЯ АФЕРА · build 1.0.7', w / 2, h * .68); g.fillStyle = '#9fd8ff'; g.font = '600 ' + 15 * s + 'px sans-serif'; g.fillText('@Izzolentaaa  ·  t.me/+OlavQF1edndlOWY1', w / 2, h * .635);}
+    if (txt) {g.textAlign = 'center'; g.fillStyle = '#ffd7a0'; g.font = '700 ' + 20 * s + 'px sans-serif'; g.fillText('MADE BY PESSIMIST', w / 2, h * .6); g.fillStyle = '#ff7adf'; g.font = '800 ' + 16 * s + 'px Impact,sans-serif'; g.fillText('ВОРОВСКАЯ РОМАНТИКА · build 1.0.8', w / 2, h * .68); g.fillStyle = '#9fd8ff'; g.font = '600 ' + 15 * s + 'px sans-serif'; g.fillText('@Izzolentaaa  ·  t.me/+OlavQF1edndlOWY1', w / 2, h * .635);}
     return c;
   }
   return {mk, scene, logoText, headset, icon, splash};

@@ -26,6 +26,14 @@ jobs:
       - name: Add Android platform
         run: npx cap add android
 
+      - name: Fixed signing key and version (so the app UPDATES, no reinstall)
+        run: |
+          set -e
+          mkdir -p ~/.android
+          cp resources/debug.keystore ~/.android/debug.keystore
+          sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/; s/versionName \"1.0\"/versionName \"1.0.7\"/" android/app/build.gradle
+          grep -n "versionCode\|versionName" android/app/build.gradle
+
       - name: Landscape, fullscreen, icon and splash
         run: |
           set -e

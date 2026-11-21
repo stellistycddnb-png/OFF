@@ -27,8 +27,8 @@ const Gfx = (() => {
   }
   function scene(g, w, h, t, S) {
     const p = S.p, night = Math.max(0, p - .72) / .28, dark = .15 + night * .4;
-    const wall = g.createLinearGradient(0, 0, 0, h); wall.addColorStop(0, '#5d7a7a'); wall.addColorStop(1, '#46605f'); g.fillStyle = wall; g.fillRect(0, 0, w, h);
-    g.fillStyle = '#2e3b3c'; g.fillRect(0, h * .74, w, h * .26); g.fillStyle = 'rgba(255,255,255,.04)'; for (let i = 0; i < 10; i++) g.fillRect(i * w / 10, h * .74, 2, h * .26);
+    const wall = g.createLinearGradient(0, 0, 0, h); wall.addColorStop(0, '#6b6a86'); wall.addColorStop(1, '#4c4a68'); g.fillStyle = wall; g.fillRect(0, 0, w, h);
+    g.fillStyle = '#3a3347'; g.fillRect(0, h * .74, w, h * .26); g.fillStyle = 'rgba(255,200,120,.06)'; for (let i = 0; i < 6; i++) g.fillRect(w * (i / 6 + .02), h * .76, w * .08, h * .22); g.fillStyle = 'rgba(255,255,255,.04)'; for (let i = 0; i < 10; i++) g.fillRect(i * w / 10, h * .74, 2, h * .26);
     // окно
     const wx = w * .05, wy = h * .1, ww = w * .3, wh = h * .45; g.save(); rr(g, wx, wy, ww, wh, 4); g.clip(); sky(g, wx, wy, ww, wh, p); g.restore(); g.strokeStyle = '#d6dcd8'; g.lineWidth = 4; rr(g, wx, wy, ww, wh, 4); g.stroke(); g.lineWidth = 2; g.beginPath(); g.moveTo(wx + ww / 2, wy); g.lineTo(wx + ww / 2, wy + wh); g.moveTo(wx, wy + wh / 2); g.lineTo(wx + ww, wy + wh / 2); g.stroke();
     // часы
@@ -41,17 +41,32 @@ const Gfx = (() => {
     // кабинет босса
     const bx = w * .66, by = h * .12, bw = w * .3, bh = h * .6; g.fillStyle = 'rgba(160,210,230,.18)'; rr(g, bx, by, bw, bh, 4); g.fill(); person(g, bx + bw / 2, by + bh * .5, 1.4, '#e0b090', '#1b1f2a', t, 0, false); g.fillStyle = '#c33'; g.fillRect(bx + bw / 2 - 1.5, by + bh * .5 + 4, 3, 12);
     g.strokeStyle = '#9bb'; g.lineWidth = 3; rr(g, bx, by, bw, bh, 4); g.stroke(); g.fillStyle = '#222'; g.font = '700 ' + Math.round(h * .03) + 'px sans-serif'; g.fillText('ДИРЕКТОР', bx + bw / 2, by + bh + 12);
+    // обстановка офиса (build 1.0.9)
+    {for (let i = 0; i < 5; i++) {const lx = w * (.1 + i * .2); g.fillStyle = '#d8d4c4'; rr(g, lx, 0, w * .09, h * .018, 2); g.fill(); g.fillStyle = 'rgba(255,245,200,' + (.45 - night * .2) + ')'; g.beginPath(); g.moveTo(lx, h * .018); g.lineTo(lx + w * .09, h * .018); g.lineTo(lx + w * .13, h * .2); g.lineTo(lx - w * .04, h * .2); g.fill();}
+      // перегородки-кубиклы
+      g.fillStyle = 'rgba(30,24,50,.55)'; for (let i = 0; i < 5; i++) g.fillRect(w * (.075 + i * .135) - w * .067, h * .5, 3, h * .24);
+      // растение
+      g.fillStyle = '#7a4a2a'; rr(g, w * .012, h * .6, w * .035, h * .1, 3); g.fill(); g.fillStyle = '#2f8a4a'; for (let k = 0; k < 5; k++) {g.beginPath(); g.ellipse(w * .03 + (k - 2) * w * .012, h * .56 - Math.abs(k - 2) * 2, w * .012, h * .06, (k - 2) * .35 + Math.sin(t + k) * .03, 0, 6.28); g.fill();}
+      // кулер
+      const kx = w * .945, ky = h * .52; g.fillStyle = '#d6e4ee'; rr(g, kx, ky, w * .04, h * .18, 3); g.fill(); g.fillStyle = 'rgba(120,190,255,.8)'; g.fillRect(kx + w * .006, ky - h * .06, w * .028, h * .06); if (Math.sin(t * 2) > .8) circ(g, kx + w * .02, ky - h * .03, 2, '#fff');
+      // принтер с бумагой
+      g.fillStyle = '#c9c9d0'; rr(g, w * .52, h * .62, w * .09, h * .07, 3); g.fill(); g.fillStyle = '#fff'; g.fillRect(w * .535, h * .6 - ((t * 6) % 6), w * .05, h * .03); g.fillStyle = Math.sin(t * 5) > 0 ? '#5f5' : '#252'; g.fillRect(w * .595, h * .64, 3, 3);
+      // стажёр бегает по коридору
+      const ix = w * (.05 + ((t * .02) % .9)); g.font = Math.round(h * .08) + 'px sans-serif'; g.textAlign = 'center'; g.fillText('🏃', ix, h * .72 + Math.abs(Math.sin(t * 8)) * -3); g.fillText('📄', ix - w * .02, h * .7);
+      // стеклянная дверь
+      g.strokeStyle = 'rgba(190,230,255,.5)'; g.lineWidth = 2; rr(g, w * .905, h * .08, w * .04, h * .62, 3); g.stroke();}
     // коллеги по лестнице
     const cols = [['#e0b090', '#7a5ac8', 'cold1', 'Дима'], ['#b98c6c', '#c8507a', 'cold2', 'Катя'], ['#f0c8a8', '#2a6a9a', 'closer', 'Рома'], ['#d8b090', '#3a4a3a', 'musor', 'Гриша'], ['#e0c0a0', '#202020', 'pult', 'Сергей']];
     cols.forEach((c, i) => {
+      if (i === (S.rank || 0)) return;
       const x = w * (.075 + i * .135), y = h * .43, sc = Math.min(1.1, w / 420); person(g, x, y, sc, c[0], c[1], t, i * 2, i < 3);
       if (i === 3) {g.fillStyle = '#1c2c5a'; rr(g, x - 9 * sc, y - 19 * sc, 18 * sc, 6 * sc, 2); g.fill(); g.fillRect(x - 11 * sc, y - 14 * sc, 22 * sc, 2 * sc); circ(g, x, y - 17 * sc, 1.6 * sc, '#ffd23a');}
       if (i === 4) {g.fillStyle = '#111'; rr(g, x - 16 * sc, y + 14 * sc, 32 * sc, 14 * sc, 2); g.fill(); g.fillStyle = 'rgba(80,255,170,.7)'; for (let k = 0; k < 4; k++) g.fillRect(x - 13 * sc + k * 7 * sc, y + 26 * sc - ((Math.sin(t * 2 + k * 1.7) + 1) * 4.5 + 2) * sc, 4 * sc, ((Math.sin(t * 2 + k * 1.7) + 1) * 4.5 + 2) * sc);}
       g.fillStyle = '#6a4a2c'; g.fillRect(x - 22 * sc, y + 24 * sc, 44 * sc, 6 * sc);
       const me = i === S.rank; g.fillStyle = me ? '#ffd23a' : 'rgba(10,8,24,.8)'; const fs = Math.max(8, Math.round(h * .05)); g.font = '700 ' + fs + 'px sans-serif'; g.textAlign = 'center'; const label = (me ? '▶ ' : '') + c[3]; const tw = g.measureText(label).width + 8; rr(g, x - tw / 2, y + 31 * sc, tw, fs + 4, 4); g.fill(); g.fillStyle = me ? '#201400' : '#e8e0ff'; g.fillText(label, x, y + 31 * sc + fs);
     });
-    // ваш персонаж (build 1.0.8)
-    {const o = S.out || [0, 0, 0], i = S.rank || 0, sc = Math.min(1.2, w / 400) * 1.1, x = w * (.075 + i * .135) + w * .062, y = h * .46;
+    // ваш персонаж (build 1.0.9)
+    {const o = S.out || [0, 0, 0], i = S.rank || 0, sc = Math.min(1.2, w / 400) * 1.1, x = w * (.075 + i * .135), y = h * .43;
       const shirts = ['#6a6a78', '#e8e8f0', '#2a2f4a', '#12121c'];
       person(g, x, y, sc, '#e8b898', shirts[o[0] || 0], t, i * 2 + 1, i < 3);
       if (o[0] >= 2) {g.fillStyle = '#c33'; g.fillRect(x - 1.2 * sc, y + 2 * sc, 2.4 * sc, 12 * sc);}
@@ -99,7 +114,7 @@ const Gfx = (() => {
     const c = mk(w, h), g = c.getContext('2d'), bg = g.createLinearGradient(0, 0, 0, h); bg.addColorStop(0, '#1a0c3a'); bg.addColorStop(.6, '#2a1050'); bg.addColorStop(1, '#0c0618'); g.fillStyle = bg; g.fillRect(0, 0, w, h);
     const s = Math.min(w / 460, h / 800); for (let i = 0; i < 60; i++) {g.fillStyle = 'rgba(255,255,255,' + (.15 + (i * 37 % 10) / 20) + ')'; g.fillRect((i * 97 % 100) / 100 * w, (i * 53 % 100) / 100 * h * .7, 2, 2);}
     headset(g, w / 2, h * .3, 70 * s, '#ffd23a'); logoText(g, w / 2, h * .5, s);
-    if (txt) {g.textAlign = 'center'; g.fillStyle = '#ffd7a0'; g.font = '700 ' + 20 * s + 'px sans-serif'; g.fillText('MADE BY PESSIMIST', w / 2, h * .6); g.fillStyle = '#ff7adf'; g.font = '800 ' + 16 * s + 'px Impact,sans-serif'; g.fillText('ВОРОВСКАЯ РОМАНТИКА · build 1.0.8', w / 2, h * .68); g.fillStyle = '#9fd8ff'; g.font = '600 ' + 15 * s + 'px sans-serif'; g.fillText('@Izzolentaaa  ·  t.me/+OlavQF1edndlOWY1', w / 2, h * .635);}
+    if (txt) {g.textAlign = 'center'; g.fillStyle = '#ffd7a0'; g.font = '700 ' + 20 * s + 'px sans-serif'; g.fillText('MADE BY PESSIMIST', w / 2, h * .6); g.fillStyle = '#ff7adf'; g.font = '800 ' + 16 * s + 'px Impact,sans-serif'; g.fillText('ВОРОВСКАЯ РОМАНТИКА · build 1.0.9', w / 2, h * .68); g.fillStyle = '#9fd8ff'; g.font = '600 ' + 15 * s + 'px sans-serif'; g.fillText('@Izzolentaaa  ·  t.me/+OlavQF1edndlOWY1', w / 2, h * .635);}
     return c;
   }
   return {mk, scene, logoText, headset, icon, splash};

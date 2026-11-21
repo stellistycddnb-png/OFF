@@ -3,7 +3,7 @@
 const TG_CHANNEL = 'https://t.me/+OlavQF1edndlOWY1', TG_USER = '@Izzolentaaa', TG_USER_URL = 'https://t.me/Izzolentaaa';
 const SAVE_KEY = 'callcenter_save_v1', SET_KEY = 'callcenter_set_v1';
 const DAYS = 30, DAY_START = 9 * 60, DAY_END = 18 * 60, RENT = 450;
-const VERSION = 'ВОРОВСКАЯ РОМАНТИКА · build 1.0.9';
+const VERSION = 'БОЛЬШАЯ ПЕРЕМЕНА · build 1.1.0';
 const COMPANY = 'ООО «Золотой Бульбаш Инвест»';
 
 const MOODS = {

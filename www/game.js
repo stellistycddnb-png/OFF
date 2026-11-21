@@ -13,10 +13,10 @@ const quota = d => Math.min(10000 + d * 1100, 36000);
 const hasU = id => !!S.upg[id];
 const RK = () => RANKS[S.rank || 0], planNow = () => Math.round(quota(S.day) * RK().plan), gap = (a, b) => Math.round(ri(a, b) * (S.rank >= 4 ? 1.5 : 1));
 const bills = () => ({h: HOUSES[S.life.h].c, n: NETS[S.life.n].c, f: FOODS[S.life.f].c, p: carUp() + S.pets.reduce((a, id) => a + PETS.find(x => x.id === id).up, 0)});
-const billsSum = () => {const b = bills(); return b.h + b.n + b.f + b.p;};
+const billsSum = () => {const b = bills(); return Math.round((b.h + b.n + b.f + b.p) * 1.2) + (typeof gearUp === 'function' ? gearUp() : 0) + (typeof staffWage === 'function' ? staffWage() : 0);};
 const lifeEn = () => clamp(100 + homeEn() + HOUSES[S.life.h].en + FOODS[S.life.f].en + S.pets.reduce((a, id) => a + PETS.find(x => x.id === id).en, 0), 40, 100);
 const lifeCons = () => homeCons() + HOUSES[S.life.h].cons + FOODS[S.life.f].cons + S.pets.reduce((a, id) => a + PETS.find(x => x.id === id).cons, 0);
-const SALARY = [500, 650, 800, 950, 1200];
+const SALARY = [450, 550, 700, 850, 1000];
 function save() {if (S && S.mode !== 'ending') lsSet(SAVE_KEY, Object.assign({}, S, {mode: 'idle', call: null}));}
 
 /* ---------- экраны ---------- */
@@ -200,7 +200,7 @@ function ending(k) {
 /* ---------- цикл ---------- */
 function tick() {
   if (!S || !running) return; if (S.mode === 'idle') {
-    if (S.rank >= 4) {const PM = PULT_MODES[S.pmode], r = (20 + S.day * 2.4) * PM.t; S.turnover += r; S.money += r * .08; S.heat = clamp(S.heat + PM.heat / 337, 0, 100); S.cons = clamp(S.cons - PM.cons / 337, 0, 100); if (S.cons <= 0) {running = false; return ending('conscience');} if (S.heat >= 100) {running = false; return ending('raid');}}
+    if (S.rank >= 4) {const PM = PULT_MODES[S.pmode], r = (20 + S.day * 2.4) * PM.t; S.turnover += r; S.money += r * .04; S.heat = clamp(S.heat + PM.heat / 337, 0, 100); S.cons = clamp(S.cons - PM.cons / 337, 0, 100); if (S.cons <= 0) {running = false; return ending('conscience');} if (S.heat >= 100) {running = false; return ending('raid');}}
     S.min += 1.6; S.energy = clamp(S.energy - .09 * (hasU('chair') ? .75 : 1), 0, 100);
     if (S.min >= S.nextCall && S.min < DAY_END - 10) {S.mode = 'ring'; Snd.ringStart(); vib([200, 100, 200]); render(); clearTimeout(ringTO); ringTO = setTimeout(() => {if (S && S.mode === 'ring') {Snd.ringStop(); S.mode = 'idle'; S.boss = clamp(S.boss - 3, 0, 100); S.nextCall = S.min + gap(25, 40); toast('Звонок пропущен. Босс недоволен.', 'bad'); render();}}, 9000);}
     if (S.min >= DAY_END) {checkDayEnd(); return;}
@@ -211,7 +211,7 @@ let scCtx = null, scW = 0, scH = 0;
 function resizeScene() {const c = $('scene'), r = c.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2); scW = Math.max(200, Math.round(r.width)); scH = Math.max(100, Math.round(r.height)); c.width = scW * d; c.height = scH * d; scCtx = c.getContext('2d'); scCtx.setTransform(d, 0, 0, d, 0, 0);}
 function frame(ts) {
   requestAnimationFrame(frame); if (!S || $('app').classList.contains('hide')) return; if (!scCtx) resizeScene();
-  dMoney += (S.money - dMoney) * .12; if (Math.abs(S.money - dMoney) < 1) dMoney = S.money; $('hMoney').textContent = fmt(dMoney); Gfx.scene(scCtx, scW, scH, ts / 1000, {mode: S.mode, pets: S.pets, nick: S.nick || 'ВЫ', out: [tier('w', 'top'), tier('w', 'shoes'), tier('w', 'acc')], kr: S.kr || 0, p: clamp((S.min - DAY_START) / (DAY_END - DAY_START), 0, 1), min: S.min, ring: S.mode === 'ring', rank: S.rank || 0});
+  dMoney += (S.money - dMoney) * .12; if (Math.abs(S.money - dMoney) < 1) dMoney = S.money; $('hMoney').textContent = fmt(dMoney); Gfx.scene(scCtx, scW, scH, ts / 1000, {mode: S.mode, pets: S.pets, nick: S.nick || 'ВЫ', out: [tier('w', 'top'), tier('w', 'shoes'), tier('w', 'acc')], kr: S.kr || 0, col: S.eqCol || null, heat: S.heat, cons: S.cons, energy: S.energy, mr: S.maxRank || 0, prog: S.turnover / Math.max(1, planNow()), staff: (S.rank === 4 && S.staff) ? S.staff.map(p => ({n: p.n, role: p.role, skin: p.skin})) : null, p: clamp((S.min - DAY_START) / (DAY_END - DAY_START), 0, 1), min: S.min, ring: S.mode === 'ring', rank: S.rank || 0});
 }
 addEventListener('resize', () => {if (S) resizeScene();});
 document.addEventListener('visibilitychange', () => {if (document.hidden && S && S.mode !== 'ending') {save(); if (running && $('app') && !$('app').classList.contains('hide')) scrMenu();}});

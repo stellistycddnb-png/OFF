@@ -21,7 +21,7 @@ const COACHES = {
   nerve: {n: 'Петрович', ic: '🧓', skill: 'nerve', d: 'Стрессоустойчивость: больше энергии с утра.', tips: ['«Дыши. Всё остальное — потом.»', '«Спи, ешь, не кури пустым».', '«Нервы — как сталь: гнутся, но не ломаются».'], ok: ['«Держишься, {nick}. Это главное.»', '«Крепкий ты. Тут таких мало».'], bad: ['«Сегодня не мой день».']}
 };
 const X1 = () => {if (!S) return {}; if (S.nick === undefined) S.nick = 'Новичок'; if (S.maxRank === undefined) S.maxRank = S.rank || 0; if (!S.skills) S.skills = {talk: 0, voice: 0, psy: 0, close: 0, nerve: 0}; if (S.slots === undefined) S.slots = 3; if (S.kr === undefined) S.kr = 0; if (S.krSaves === undefined) S.krSaves = 0; if (!S.mgr) S.mgr = {}; if (!S.vis) S.vis = {}; if (!S.nextEn) S.nextEn = 0; return S;};
-const skillEn = () => (S && S.skills ? S.skills.nerve * 2 : 0);
+const skillEn = () => (S && S.skills ? S.skills.nerve * 2 : 0) + (typeof allFx === 'function' && S ? Math.round(allFx().en) : 0);
 const nick = () => (S && S.nick) || 'Новичок';
 /* ---- должности: свои действия и реплики ---- */
 const RANK_ACTS = [
@@ -181,7 +181,7 @@ document.addEventListener('click', e => {
   else if (a === 'v_mgr') {const L = OFFICES.find(x => x.id === locCur.id), m = L.mgr; S.vis[L.id] = S.vis[L.id] || {}; S.vis[L.id].m = 1; let add = 1, msg = m.ic + ' ' + m.n + ': ' + pick(m.q); if (v === 'adv') {S.buffAdvice = 1; msg += '<br>Совет: +5 к убеждению в следующем звонке.';} else if (v === 'gift') {S.money -= 500; S.heat = clamp(S.heat + 2, 0, 100); S.cons = clamp(S.cons - 2, 0, 100); add = 2; msg += '<br>Конверт принят. Доверие +2, риск +2.'; Snd.sfx('coin');} else {S.cons = clamp(S.cons + 1, 0, 100); msg += '<br>Разговор по душам. Совесть +1.';} S.mgr[L.id] = Math.min(4, (S.mgr[L.id] || 0) + add); renderHud(); openLoc('o', L.id, msg);}
 });
 const _nextDay8 = nextDay;
-nextDay = function () {X1(); S.nextEn = 0; S.vis = {}; return _nextDay8();};
+nextDay = function () {X1(); S.vis = {}; return _nextDay8();};
 const _applyEvent = applyEvent;
 applyEvent = function (v) {const [i, k] = String(v).split(':').map(Number), fx = EVENTS[i] && EVENTS[i].ch[k] && EVENTS[i].ch[k].fx; _applyEvent(v); if (fx) {X1(); if (fx.slots) S.slots += fx.slots; if (fx.kr !== undefined) S.kr = fx.kr;}};
 /* охрана Палыча спасает от обыска */
@@ -213,7 +213,7 @@ DILEMMAS.push(
 );
 /* ---- новости ---- */
 function scrNews() {
-  showScr('<div class="box"><h2>📰 Что нового</h2><p style="color:#ff7adf;font-weight:800">' + TITLE8 + ' · ' + BUILD8 + '</p><h3>В этом обновлении</h3><p>• <b>1.0.9:</b> вы стоите на своей позиции один, офис перепланирован (лампы, перегородки, кулер, принтер, растение, стажёр с бумагами), 13 новых офисных событий, «конец смены» и эпилог в финале<br>• Игра теперь 30 дней, а не 14<br>• Ваш персонаж виден в сцене и меняется вместе с позицией и одеждой<br>• Своё погоняло<br>• Выбор позиции: Первая холодка, Вторая холодка, Клоузер, «Мусор», Пульт. У каждой свои действия и реплики<br>• Коучи в офисах: 5 навыков, прокачка до 5 уровня, свои фразы у каждого коуча<br>• Управляющие офисами и поездки по другим офисам: учёба и бонусы<br>• Много локаций: 6 офисов и 8 мест города<br>• Палыч теперь «Крыша» из службы безопасности: берёт деньги и закрывает глаза. «Мусор» — отдельная позиция<br>• HR-девушки сдаются быстрее: легче расположить, новые прогулки и кино<br>• Много новых событий и вариантов ответа</p><h3>Ранее</h3><p>• Меню, коллеги, дом и мебель, питомцы, достижения, диалоги по этапам</p><div class="row" style="margin-top:8px"><button class="btn pri" data-a="x_close">Понятно</button></div></div>', true); lsSet('cc_news_109', 1);
+  showScr('<div class="box"><h2>📰 Что нового</h2><p style="color:#ff7adf;font-weight:800">' + TITLE8 + ' · ' + BUILD8 + '</p><h3>В этом обновлении</h3><p>• <b>1.0.9:</b> вы стоите на своей позиции один, офис перепланирован (лампы, перегородки, кулер, принтер, растение, стажёр с бумагами), 13 новых офисных событий, «конец смены» и эпилог в финале<br>• Игра теперь 30 дней, а не 14<br>• Ваш персонаж виден в сцене и меняется вместе с позицией и одеждой<br>• Своё погоняло<br>• Выбор позиции: Первая холодка, Вторая холодка, Клоузер, «Мусор», Пульт. У каждой свои действия и реплики<br>• Коучи в офисах: 5 навыков, прокачка до 5 уровня, свои фразы у каждого коуча<br>• Управляющие офисами и поездки по другим офисам: учёба и бонусы<br>• Много локаций: 6 офисов и 8 мест города<br>• Палыч теперь «Крыша» из службы безопасности: берёт деньги и закрывает глаза. «Мусор» — отдельная позиция<br>• HR-девушки сдаются быстрее: легче расположить, новые прогулки и кино<br>• Много новых событий и вариантов ответа</p><h3>Ранее</h3><p>• Меню, коллеги, дом и мебель, питомцы, достижения, диалоги по этапам</p><div class="row" style="margin-top:8px"><button class="btn pri" data-a="x_close">Понятно</button></div></div>', true); lsSet('cc_news_110', 1);
 }
 
 const _ds8 = daySummary;

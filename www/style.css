@@ -40,7 +40,7 @@ canvas#tcv{position:fixed;inset:0;width:100%;height:100%}
 .bar.grn i{background:#5dffc0}.bar.yel i{background:#ffd23a}.bar.red i{background:#ff5a6a}
 #plan{font-size:12px;color:var(--mu);margin-top:5px}#planB{margin-top:3px}
 #main>*{flex:none}
-#scene{width:100%;height:25vh;min-height:120px;flex:none;border-radius:12px;border:1.5px solid var(--bd);display:block;background:#222}
+#scene{width:100%;height:40vh;min-height:230px;transition:height .25s;flex:none;border-radius:12px;border:1.5px solid var(--bd);display:block;background:#222}
 #main{flex:1;background:var(--pn);border:1.5px solid var(--bd);border-radius:12px;padding:8px;overflow-y:auto;display:flex;flex-direction:column;gap:7px}
 .idle{margin:auto;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;color:#cfc4ee}.idle .big{font-size:44px}
 .btn.huge{font-size:20px;padding:18px 26px}

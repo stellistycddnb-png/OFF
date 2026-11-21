@@ -32,24 +32,39 @@ const Gfx = (() => {
     // окно
     const wx = w * .05, wy = h * .1, ww = w * .3, wh = h * .45; g.save(); rr(g, wx, wy, ww, wh, 4); g.clip(); sky(g, wx, wy, ww, wh, p); g.restore(); g.strokeStyle = '#d6dcd8'; g.lineWidth = 4; rr(g, wx, wy, ww, wh, 4); g.stroke(); g.lineWidth = 2; g.beginPath(); g.moveTo(wx + ww / 2, wy); g.lineTo(wx + ww / 2, wy + wh); g.moveTo(wx, wy + wh / 2); g.lineTo(wx + ww, wy + wh / 2); g.stroke();
     // часы
-    const cx = w * .5, cy = h * .2; circ(g, cx, cy, 16, '#f4efe0'); g.strokeStyle = '#222'; g.lineWidth = 2; g.beginPath(); g.arc(cx, cy, 16, 0, 6.28); g.stroke();
+    const cx = w * .585, cy = h * .27; circ(g, cx, cy, 16, '#f4efe0'); g.strokeStyle = '#222'; g.lineWidth = 2; g.beginPath(); g.arc(cx, cy, 16, 0, 6.28); g.stroke();
     const tm = S.min, hr = (tm / 60) % 12, mn = tm % 60; g.lineWidth = 2.4; g.beginPath(); g.moveTo(cx, cy); g.lineTo(cx + Math.sin(hr / 12 * 6.283) * 8, cy - Math.cos(hr / 12 * 6.283) * 8); g.stroke(); g.lineWidth = 1.5; g.beginPath(); g.moveTo(cx, cy); g.lineTo(cx + Math.sin(mn / 60 * 6.283) * 12, cy - Math.cos(mn / 60 * 6.283) * 12); g.stroke();
-    // плакат
-    rr(g, w * .4, h * .38, w * .2, h * .22, 3); g.fillStyle = '#f2e6b0'; g.fill(); g.fillStyle = '#b22'; g.font = '800 ' + Math.round(h * .045) + 'px sans-serif'; g.textAlign = 'center'; g.fillText('ПЛАН!', w * .5, h * .46); g.fillStyle = '#333'; g.font = '700 ' + Math.round(h * .03) + 'px sans-serif'; g.fillText('ДЕНЬГИ НЕ', w * .5, h * .52); g.fillText('ПАХНУТ', w * .5, h * .56);
-    g.strokeStyle = '#1a7a2a'; g.lineWidth = 2; g.beginPath(); g.moveTo(w * .42, h * .58); g.lineTo(w * .47, h * .54); g.lineTo(w * .5, h * .56); g.lineTo(w * .57, h * .5); g.stroke();
+    // плакаты
+    {const px = w * .365, py = h * .18, pw = w * .15, ph = h * .2; rr(g, px, py, pw, ph, 3); const pg = g.createLinearGradient(px, py, px, py + ph); pg.addColorStop(0, '#12331e'); pg.addColorStop(1, '#0a1c10'); g.fillStyle = pg; g.fill(); g.strokeStyle = '#ffd23a'; g.lineWidth = 1.5; g.stroke();
+      g.textAlign = 'center'; g.fillStyle = '#ffd23a'; const f1 = Math.max(8, Math.round(h * .062)); g.font = '900 ' + f1 + 'px Impact,sans-serif'; g.fillText('MAKE', px + pw / 2, py + ph * .38); g.fillStyle = '#5dffc0'; g.fillText('MONEY', px + pw / 2, py + ph * .72); g.fillStyle = '#ffd23a'; g.font = '700 ' + Math.round(f1 * .8) + 'px sans-serif'; g.fillText('₴ ₴ ₴', px + pw / 2, py + ph * .93);
+      const bx3 = w * .36, by3 = h * .02, bw3 = w * .285, bh3 = h * .13; rr(g, bx3, by3, bw3, bh3, 3); g.fillStyle = '#3a0d0d'; g.fill(); g.strokeStyle = '#c8a050'; g.lineWidth = 1.5; g.stroke(); g.fillStyle = '#e8d29a'; const f2 = Math.max(7, Math.round(h * .045)); g.font = '800 ' + f2 + 'px sans-serif'; g.fillText('ЧУГУН ВЕЩАЕТ:', bx3 + bw3 / 2, by3 + bh3 * .42); g.fillStyle = '#ff6a5a'; g.font = '900 ' + f2 + 'px sans-serif'; g.fillText('НУЖНО ЕБАШИТЬ!', bx3 + bw3 / 2, by3 + bh3 * .8);}
     // кабинет босса
     const bx = w * .66, by = h * .12, bw = w * .3, bh = h * .6; g.fillStyle = 'rgba(160,210,230,.18)'; rr(g, bx, by, bw, bh, 4); g.fill(); person(g, bx + bw / 2, by + bh * .5, 1.4, '#e0b090', '#1b1f2a', t, 0, false); g.fillStyle = '#c33'; g.fillRect(bx + bw / 2 - 1.5, by + bh * .5 + 4, 3, 12);
     g.strokeStyle = '#9bb'; g.lineWidth = 3; rr(g, bx, by, bw, bh, 4); g.stroke(); g.fillStyle = '#222'; g.font = '700 ' + Math.round(h * .03) + 'px sans-serif'; g.fillText('ДИРЕКТОР', bx + bw / 2, by + bh + 12);
-    // коллеги
-    const cols = [['#e0b090', '#a33'], ['#b98c6c', '#357'], ['#f0c8a8', '#373']]; cols.forEach((c, i) => {const x = w * (.12 + i * .2), y = h * .56; person(g, x, y, 1.15, c[0], c[1], t, i * 2, true); g.fillStyle = '#6a4a2c'; g.fillRect(x - 22, y + 24, 44, 8); g.fillStyle = '#222'; g.fillRect(x - 11, y + 8, 22, 15); g.fillStyle = 'rgba(120,220,255,' + (.5 + Math.sin(t * 5 + i) * .15) + ')'; g.fillRect(x - 9, y + 10, 18, 11);});
+    // коллеги по лестнице
+    const cols = [['#e0b090', '#7a5ac8', 'cold1', 'Дима'], ['#b98c6c', '#c8507a', 'cold2', 'Катя'], ['#f0c8a8', '#2a6a9a', 'closer', 'Рома'], ['#d8b090', '#3a4a3a', 'musor', 'Палыч'], ['#e0c0a0', '#202020', 'pult', 'Сергей']];
+    cols.forEach((c, i) => {
+      const x = w * (.075 + i * .135), y = h * .43, sc = Math.min(1.1, w / 420); person(g, x, y, sc, c[0], c[1], t, i * 2, i < 3);
+      if (i === 3) {g.fillStyle = '#1c2c5a'; rr(g, x - 9 * sc, y - 19 * sc, 18 * sc, 6 * sc, 2); g.fill(); g.fillRect(x - 11 * sc, y - 14 * sc, 22 * sc, 2 * sc); circ(g, x, y - 17 * sc, 1.6 * sc, '#ffd23a');}
+      if (i === 4) {g.fillStyle = '#111'; rr(g, x - 16 * sc, y + 14 * sc, 32 * sc, 14 * sc, 2); g.fill(); g.fillStyle = 'rgba(80,255,170,.7)'; for (let k = 0; k < 4; k++) g.fillRect(x - 13 * sc + k * 7 * sc, y + 26 * sc - ((Math.sin(t * 2 + k * 1.7) + 1) * 4.5 + 2) * sc, 4 * sc, ((Math.sin(t * 2 + k * 1.7) + 1) * 4.5 + 2) * sc);}
+      g.fillStyle = '#6a4a2c'; g.fillRect(x - 22 * sc, y + 24 * sc, 44 * sc, 6 * sc);
+      const me = i === S.rank; g.fillStyle = me ? '#ffd23a' : 'rgba(10,8,24,.8)'; const fs = Math.max(8, Math.round(h * .05)); g.font = '700 ' + fs + 'px sans-serif'; g.textAlign = 'center'; const label = (me ? '▶ ' : '') + c[3]; const tw = g.measureText(label).width + 8; rr(g, x - tw / 2, y + 31 * sc, tw, fs + 4, 4); g.fill(); g.fillStyle = me ? '#201400' : '#e8e0ff'; g.fillText(label, x, y + 31 * sc + fs);
+    });
     // ваш стол
     const dy = h * .8; const dg = g.createLinearGradient(0, dy, 0, h); dg.addColorStop(0, '#7a5230'); dg.addColorStop(1, '#4e321c'); g.fillStyle = dg; g.fillRect(0, dy, w, h - dy);
-    g.fillStyle = '#222'; rr(g, w * .33, dy - h * .12, w * .34, h * .14, 4); g.fill(); g.fillStyle = 'rgba(110,255,170,' + (.55 + Math.sin(t * 3) * .1) + ')'; g.fillRect(w * .345, dy - h * .105, w * .31, h * .1);
-    g.fillStyle = 'rgba(0,60,20,.55)'; for (let i = 0; i < 4; i++) g.fillRect(w * .36, dy - h * .095 + i * h * .022, w * (.1 + ((i * 37 + Math.floor(t * 2)) % 7) * .03), 3);
+    g.fillStyle = '#222'; rr(g, w * .38, dy - h * .085, w * .26, h * .105, 4); g.fill(); g.fillStyle = 'rgba(110,255,170,' + (.55 + Math.sin(t * 3) * .1) + ')'; g.fillRect(w * .39, dy - h * .075, w * .24, h * .075);
+    g.fillStyle = 'rgba(0,60,20,.55)'; for (let i = 0; i < 4; i++) g.fillRect(w * .4, dy - h * .068 + i * h * .015, w * (.06 + ((i * 37 + Math.floor(t * 2)) % 7) * .02), 2);
+    if (S.mode === 'call') {g.fillStyle = 'rgba(0,70,30,.85)'; for (let i = 0; i < 14; i++) {const bh = (Math.sin(t * 9 + i * 1.3) * .5 + .5) * h * .05 + 2; g.fillRect(w * .4 + i * w * .0165, dy - h * .022 - bh, w * .011, bh);}}
     // телефон
     const ph = S.ring ? Math.sin(t * 40) * 1.5 : 0; g.save(); g.translate(w * .15 + ph, dy + 6); rr(g, 0, 0, 36, 18, 4); g.fillStyle = S.ring ? '#ffd23a' : '#2a2a30'; g.fill(); if (S.ring) {g.shadowColor = '#ffd23a'; g.shadowBlur = 16; rr(g, 0, 0, 36, 18, 4); g.fill(); g.shadowBlur = 0;} g.restore();
+    (S.pets || []).forEach((id, i) => {g.font = Math.round(h * .13) + 'px sans-serif'; g.textAlign = 'center'; g.fillText({fish: '🐟', ham: '🐹', cat: '🐈', dog: '🐕'}[id] || '🐾', w * (.9 - i * .08), dy + 8 + Math.sin(t * 2 + i) * 1.5);});
     // кружка и пар
     g.fillStyle = '#eee'; rr(g, w * .78, dy + 4, 18, 16, 3); g.fill(); g.fillStyle = '#6b3e1c'; g.fillRect(w * .78 + 2, dy + 6, 14, 4); for (let i = 0; i < 3; i++) {g.strokeStyle = 'rgba(255,255,255,' + (.35 - i * .08) + ')'; g.lineWidth = 2; g.beginPath(); g.moveTo(w * .78 + 5 + i * 4, dy + 2); g.quadraticCurveTo(w * .78 + 2 + i * 4 + Math.sin(t * 3 + i) * 3, dy - 8, w * .78 + 6 + i * 4, dy - 16 - i * 3); g.stroke();}
+    // луч света и пыль
+    if (night < .6) {const lg = g.createLinearGradient(wx, wy, wx + ww * .8, h); lg.addColorStop(0, 'rgba(255,240,190,' + .16 * (1 - night) + ')'); lg.addColorStop(1, 'rgba(255,240,190,0)'); g.fillStyle = lg; g.beginPath(); g.moveTo(wx + 4, wy + wh); g.lineTo(wx + ww - 4, wy + wh); g.lineTo(wx + ww * 1.5, h * .8); g.lineTo(wx + ww * .2, h * .8); g.closePath(); g.fill();
+      for (let i = 0; i < 18; i++) {const px = wx + ww * (.2 + ((i * 53) % 100) / 100 * .9) + Math.sin(t * .6 + i) * 6, py = wy + wh + ((t * (6 + i % 5) + i * 31) % (h * .75 - wy - wh)); g.fillStyle = 'rgba(255,250,220,' + .35 * (1 - night) + ')'; g.fillRect(px, py, 1.6, 1.6);}}
+    // реплики коллег
+    const SAY = ['...', 'Алё?', 'Да-да', 'Сумма?', 'Тсс', 'Минутку', 'Перезвоню']; for (let i = 0; i < 5; i++) {const ph = Math.floor(t / 2.6 + i * 1.9), hs = (ph * 7919 + i * 104729) % 11; if (hs < 3 && (t / 2.6 + i * 1.9) % 1 < .8) {const sc2 = Math.min(1.1, w / 420), bx2 = w * (.075 + i * .135), by2 = h * .43 - 26 * sc2, tx = SAY[hs + i % 4]; g.font = '600 ' + Math.max(8, Math.round(h * .045)) + 'px sans-serif'; const tw2 = g.measureText(tx).width + 10; g.fillStyle = 'rgba(255,255,255,.92)'; rr(g, bx2 - tw2 / 2, by2 - 14, tw2, 14, 5); g.fill(); g.fillStyle = '#222'; g.textAlign = 'center'; g.fillText(tx, bx2, by2 - 3);}}
     // освещение
     const lf = 1 - Math.max(0, Math.sin(t * 17) * Math.sin(t * 3.1)) * .06; g.fillStyle = 'rgba(8,10,30,' + dark * lf + ')'; g.fillRect(0, 0, w, h);
     const vg = g.createRadialGradient(w / 2, h / 2, h * .3, w / 2, h / 2, h * .9); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.45)'); g.fillStyle = vg; g.fillRect(0, 0, w, h);
@@ -76,7 +91,7 @@ const Gfx = (() => {
     const c = mk(w, h), g = c.getContext('2d'), bg = g.createLinearGradient(0, 0, 0, h); bg.addColorStop(0, '#1a0c3a'); bg.addColorStop(.6, '#2a1050'); bg.addColorStop(1, '#0c0618'); g.fillStyle = bg; g.fillRect(0, 0, w, h);
     const s = Math.min(w / 460, h / 800); for (let i = 0; i < 60; i++) {g.fillStyle = 'rgba(255,255,255,' + (.15 + (i * 37 % 10) / 20) + ')'; g.fillRect((i * 97 % 100) / 100 * w, (i * 53 % 100) / 100 * h * .7, 2, 2);}
     headset(g, w / 2, h * .3, 70 * s, '#ffd23a'); logoText(g, w / 2, h * .5, s);
-    if (txt) {g.textAlign = 'center'; g.fillStyle = '#ffd7a0'; g.font = '700 ' + 20 * s + 'px sans-serif'; g.fillText('MADE BY PESSIMIST', w / 2, h * .6); g.fillStyle = '#9fd8ff'; g.font = '600 ' + 15 * s + 'px sans-serif'; g.fillText('@Izzolentaaa  ·  t.me/+OlavQF1edndlOWY1', w / 2, h * .635);}
+    if (txt) {g.textAlign = 'center'; g.fillStyle = '#ffd7a0'; g.font = '700 ' + 20 * s + 'px sans-serif'; g.fillText('MADE BY PESSIMIST', w / 2, h * .6); g.fillStyle = '#ff7adf'; g.font = '800 ' + 16 * s + 'px Impact,sans-serif'; g.fillText('БОЛЬШАЯ АФЕРА · build 1.0.7', w / 2, h * .68); g.fillStyle = '#9fd8ff'; g.font = '600 ' + 15 * s + 'px sans-serif'; g.fillText('@Izzolentaaa  ·  t.me/+OlavQF1edndlOWY1', w / 2, h * .635);}
     return c;
   }
   return {mk, scene, logoText, headset, icon, splash};

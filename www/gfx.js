@@ -41,7 +41,7 @@ const Gfx = (() => {
     // кабинет босса
     const bx = w * .66, by = h * .12, bw = w * .3, bh = h * .6; g.fillStyle = 'rgba(160,210,230,.18)'; rr(g, bx, by, bw, bh, 4); g.fill(); person(g, bx + bw / 2, by + bh * .5, 1.4, '#e0b090', '#1b1f2a', t, 0, false); g.fillStyle = '#c33'; g.fillRect(bx + bw / 2 - 1.5, by + bh * .5 + 4, 3, 12);
     g.strokeStyle = '#9bb'; g.lineWidth = 3; rr(g, bx, by, bw, bh, 4); g.stroke(); g.fillStyle = '#222'; g.font = '700 ' + Math.round(h * .03) + 'px sans-serif'; g.fillText('ДИРЕКТОР', bx + bw / 2, by + bh + 12);
-    // обстановка офиса (build 1.1.0)
+    // обстановка офиса (build 1.3.0)
     {for (let i = 0; i < 5; i++) {const lx = w * (.1 + i * .2); g.fillStyle = '#d8d4c4'; rr(g, lx, 0, w * .09, h * .018, 2); g.fill(); g.fillStyle = 'rgba(255,245,200,' + (.45 - night * .2) + ')'; g.beginPath(); g.moveTo(lx, h * .018); g.lineTo(lx + w * .09, h * .018); g.lineTo(lx + w * .13, h * .2); g.lineTo(lx - w * .04, h * .2); g.fill();}
       // перегородки-кубиклы
       g.fillStyle = 'rgba(30,24,50,.55)'; for (let i = 0; i < 5; i++) g.fillRect(w * (.075 + i * .135) - w * .067, h * .5, 3, h * .24);
@@ -65,7 +65,7 @@ const Gfx = (() => {
       g.fillStyle = '#6a4a2c'; g.fillRect(x - 22 * sc, y + 24 * sc, 44 * sc, 6 * sc);
       const me = i === S.rank; g.fillStyle = me ? '#ffd23a' : 'rgba(10,8,24,.8)'; const fs = Math.max(8, Math.round(h * .05)); g.font = '700 ' + fs + 'px sans-serif'; g.textAlign = 'center'; const label = (me ? '▶ ' : '') + c[3]; const tw = g.measureText(label).width + 8; rr(g, x - tw / 2, y + 31 * sc, tw, fs + 4, 4); g.fill(); g.fillStyle = me ? '#201400' : '#e8e0ff'; g.fillText(label, x, y + 31 * sc + fs);
     });
-    // ваш персонаж (build 1.1.0)
+    // ваш персонаж (build 1.3.0)
     {const o = S.out || [0, 0, 0], i = S.rank || 0, sc = Math.min(1.2, w / 400) * 1.1, x = w * (.075 + i * .135), y = h * .43;
       const shirts = ['#6a6a78', '#e8e8f0', '#2a2f4a', '#12121c'];
       person(g, x, y, sc, '#e8b898', S.col || shirts[o[0] || 0], t, i * 2 + 1, i < 3);
@@ -114,7 +114,7 @@ const Gfx = (() => {
     const c = mk(w, h), g = c.getContext('2d'), bg = g.createLinearGradient(0, 0, 0, h); bg.addColorStop(0, '#1a0c3a'); bg.addColorStop(.6, '#2a1050'); bg.addColorStop(1, '#0c0618'); g.fillStyle = bg; g.fillRect(0, 0, w, h);
     const s = Math.min(w / 460, h / 800); for (let i = 0; i < 60; i++) {g.fillStyle = 'rgba(255,255,255,' + (.15 + (i * 37 % 10) / 20) + ')'; g.fillRect((i * 97 % 100) / 100 * w, (i * 53 % 100) / 100 * h * .7, 2, 2);}
     headset(g, w / 2, h * .3, 70 * s, '#ffd23a'); logoText(g, w / 2, h * .5, s);
-    if (txt) {g.textAlign = 'center'; g.fillStyle = '#ffd7a0'; g.font = '700 ' + 20 * s + 'px sans-serif'; g.fillText('MADE BY PESSIMIST', w / 2, h * .6); g.fillStyle = '#ff7adf'; g.font = '800 ' + 16 * s + 'px Impact,sans-serif'; g.fillText('БОЛЬШАЯ ПЕРЕМЕНА · build 1.1.0', w / 2, h * .68); g.fillStyle = '#9fd8ff'; g.font = '600 ' + 15 * s + 'px sans-serif'; g.fillText('@Izzolentaaa  ·  t.me/+OlavQF1edndlOWY1', w / 2, h * .635);}
+    if (txt) {g.textAlign = 'center'; g.fillStyle = '#ffd7a0'; g.font = '700 ' + 20 * s + 'px sans-serif'; g.fillText('MADE BY PESSIMIST', w / 2, h * .6); g.fillStyle = '#ff7adf'; g.font = '800 ' + 16 * s + 'px Impact,sans-serif'; g.fillText('БОЛЬШАЯ ПЕРЕМЕНА · build 1.3.0', w / 2, h * .68); g.fillStyle = '#9fd8ff'; g.font = '600 ' + 15 * s + 'px sans-serif'; g.fillText('@Izzolentaaa  ·  t.me/+OlavQF1edndlOWY1', w / 2, h * .635);}
     return c;
   }
   return {mk, scene, logoText, headset, icon, splash};

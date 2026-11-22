@@ -45,7 +45,7 @@ const homeEn = () => Math.floor(comfortScore() / 4) + CARS[H().car].en + (typeof
 const homeCons = () => Math.floor(comfortScore() / 6) + (H().gf ? 3 : 0);
 const hrDaily = () => {const h = H(); HRS.forEach(g => {const r = h.hr[g.id]; if (r.last < S.day && r.aff > 0) r.aff = Math.max(0, r.aff - (h.gf === g.id ? 4 : 2)); r.today = 0; r.ann = Math.max(0, r.ann - 20); if (h.gf === g.id && r.aff < 60) {h.gf = null; toast('💔 Отношения с ' + g.n + ' закончились: вы пропали.', 'bad');}}); h.eve = h.eve; if (h.car === 3 && Math.random() < .15) {S.money -= 400; toast('🚗 «Лада» сломалась. Ремонт ₴400.', 'bad');}};
 const stageName = a => a < 20 ? 'Едва знакомы' : a < 40 ? 'Приятели' : a < 60 ? 'Симпатия' : a < 80 ? 'Можно на свидание' : 'Очень близки';
-const homeBack = () => {const f = H().from; if (f === 'summary') daySummaryRerender(); else scrTeam();};
+const homeBack = () => {const f = H().from; if (f === 'summary') daySummaryRerender(); else if (f === 'idle') {hideScr(); running = true; T0 = performance.now();} else scrTeam();};
 
 /* --- рисование дома --- */
 function drawHome(cv, t) {

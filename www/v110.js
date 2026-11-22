@@ -1,5 +1,5 @@
-/* ======== БОЛЬШАЯ ПЕРЕМЕНА · build 1.1.0 ======== */
-const BUILD10 = 'build 1.1.0', TITLE10 = 'БОЛЬШАЯ ПЕРЕМЕНА', ECON = .72;
+/* ======== БОЛЬШАЯ ПЕРЕМЕНА · build 1.3.0 ======== */
+const BUILD10 = 'build 1.3.0', TITLE10 = 'БОЛЬШАЯ ПЕРЕМЕНА', ECON = .72;
 const X2 = () => {X1(); if (!S.gear) S.gear = {}; if (!S.eq) S.eq = {}; if (!S.st) S.st = []; if (!S.q) S.q = []; if (!S.cand) S.cand = null; if (S.teamAcc === undefined) S.teamAcc = 0; if (!S.desks) S.desks = 8; if (S.maxRank >= 4 && !S.staff) mkStaff(); return S;};
 /* ---------- снаряжение с баффами и дебаффами ---------- */
 const FXN = {talk: ['убеждение', 1], calm: ['подозрение', -1], en: ['энергия в день', 1], inc: ['доход', 100], heat: ['риск в день', 1], cons: ['совесть в день', 1], boss: ['босс в день', 1]};
@@ -23,7 +23,7 @@ const gid = (c, i) => c + i;
 function allFx() {
   const r = {talk: 0, calm: 0, en: 0, inc: 0, heat: 0, cons: 0, boss: 0}; if (!S) return r; const add = fx => Object.keys(fx).forEach(k => {if (k in r) r[k] += fx[k];});
   if (S.gear) {Object.keys(GEAR).forEach(c => GEAR[c].it.forEach((it, i) => {const id = gid(c, i); if (!S.gear[id]) return; if (c === 'furn' || (S.eq && S.eq[c] === id)) add(it[4]);}));}
-  (S.st || []).forEach(s => add(s.fx)); return r;
+  (S.st || []).forEach(s => add(s.fx)); if (S.resp >= 25) r.boss += .5; if (S.resp >= 45) r.inc += .04; if (S.resp >= 70) {r.inc += .04; r.heat -= .5;} return r;
 }
 const gearUp = () => {let u = 0; if (S && S.eq && S.eq.car) {const i = +S.eq.car.slice(3); u += GEAR.car.it[i][3];} return u;};
 const stText = () => (S.st || []).map(s => '<div class="tech" style="padding:6px 10px"><div>' + s.ic + ' <b>' + s.n + '</b> · ' + s.d + ' дн.<br><small>' + fxText(s.fx) + '</small></div></div>').join('');
@@ -76,17 +76,16 @@ const LOGIC_LN = ['«Смотрите: вы уже в системе — зна�
 const _choose10 = choose;
 choose = function (type) {
   const c = S && S.call; if (!c) return; X2();
-  if (type === 'r:logic') {if (c.dil) return; c.rused = c.rused || {}; if (c.rused.logic >= 2) return toast('Больше двух доводов за разговор не нужно.', 'bad'); c.rused.logic = (c.rused.logic || 0) + 1; c.dil = mkLogic(c); c.logicUsed = 1; S.min += 2; Snd.sfx('key'); if (S.rank <= 1 && Math.random() < .5) {c.log.push({w: 'me', t: '🎧 Коуч в наушнике: «Хороший ход — думаешь головой».'}); c.pers += 3;} return render();}
+  if (type === 'r:logic') {if (c.dil) return; c.rused = c.rused || {}; if (c.rused.logic >= 2) return toast('Больше двух доводов за разговор не нужно.', 'bad'); c.rused.logic = (c.rused.logic || 0) + 1; c.dil = mkLogic(c); c.logicUsed = 1; S.min += 2; Snd.sfx('key'); return render();}
   const normal = ['pressure', 'flattery', 'jargon', 'empathy'].includes(type), p0 = c.pers, f = allFx();
   _choose10(type);
   if (!normal || S.call !== c || S.mode !== 'call') return;
   const d = c.pers - p0; if (d > 0) c.pers = p0 + d * .7; c.pers += f.talk * .6; c.susp = Math.max(0, c.susp - f.calm * .6);
   c.hist = (c.hist || []).concat(type);
-  if (S.rank <= 1) {const h = c.hist, n = h.length; if (n >= 2 && h[n - 1] === h[n - 2]) {c.pers = Math.max(0, c.pers - 4); c.log.push({w: 'me', t: '🎧 Коуч: «Стоп! Ты повторяешься — меняй подход».'}); toast('🎧 Коуч поправил вас: −4 к убеждению', 'bad');} else if (Math.random() < .2) c.log.push({w: 'me', t: '🎧 Коуч: ' + pick(COACH_CALL[S.rank])});}
-  else if (Math.random() < .3) c.log.push({w: 'them', t: pick(LOGIC_LN)});
+  {const h = c.hist, n = h.length; if (n >= 2 && h[n - 1] === h[n - 2]) {c.pers = Math.max(0, c.pers - 4); c.log.push({w: 'them', t: '«Вы повторяетесь. Скажите что-нибудь новое».'}); toast('Вы повторяетесь: −4 к убеждению', 'bad');} else if (Math.random() < .3) c.log.push({w: 'them', t: pick(LOGIC_LN)}); else if (typeof whisper === 'function' && S.rank <= 2 && Math.random() < .15) whisper(c);}
   render();
 };
-const _rd10 = resolveDil; resolveDil = function (k) {const c = S.call, ch = c && c.dil && c.dil.ch[k]; _rd10(k); if (ch && ch.r && S.call === c && S.mode === 'call') {c.log.push({w: 'them', t: ch.r}); if (ch.ok && S.rank <= 1) c.log.push({w: 'me', t: '🎧 Коуч: «Вот это работа головой!»'}); render();}};
+const _rd10 = resolveDil; resolveDil = function (k) {const c = S.call, ch = c && c.dil && c.dil.ch[k]; _rd10(k); if (ch && ch.r && S.call === c && S.mode === 'call') {c.log.push({w: 'them', t: ch.r}); render();}};
 const _ans10 = answer; answer = function () {_ans10(); const c = S && S.call; if (!c) return; X2(); const f = allFx(); c.pers += f.talk * 1.5; c.legend = {n: pick(LEG_N), d: pick(LEG_D)}; c.log.push({w: 'me', t: '«Меня зовут ' + c.legend.n + ', ' + c.legend.d + '.»'});};
 const _suc10 = success; success = function () {const m0 = S.money; _suc10(); X2(); const d = S.money - m0; if (d > 0) S.money = m0 + d * ECON * (1 + allFx().inc);};
 /* ---------- собрания у коучей (холодка) ---------- */
@@ -120,10 +119,9 @@ const _td10 = teamDaily; let sumExtra = null;
 teamDaily = function () {_td10(); X2(); stDaily(); sumExtra = {lines: []}; const hf = allFx(); S.heat = clamp(S.heat + hf.heat, 0, 100); S.cons = clamp(S.cons + hf.cons, 0, 100); S.boss = clamp(S.boss + hf.boss, 0, 100); sumExtra.staff = staffDaily();};
 const _ds10 = daySummary; daySummary = function () {sumExtra = null; _ds10(); X2(); const bx = document.querySelector('#scr .box'); if (!bx || S.mode !== 'summary') return; const h2 = bx.querySelector('h2'); let html = '';
   if (sumExtra && sumExtra.staff) {const o = sumExtra.staff; html += '<div class="help" style="margin:6px 0">👥 <b>Команда принесла ' + fmt(o.inc) + '</b> (зарплаты команды ' + fmt(staffWage()) + ' уже вычтены)' + (o.lines.length ? '<br>' + o.lines.join('<br>') : '') + '</div>'; if (o.contest) {const c = o.contest; html += '<div class="help" style="margin:6px 0">🏆 <b>Соревнование команд: ' + c.place + '-е место</b> · ваша ' + fmt(c.you) + ' · соперники ' + c.rs.map(fmt).join(', ') + (c.prize ? ' · ' + (c.prize > 0 ? '+' : '') + fmt(c.prize) : '') + '</div>';}}
-  if (S.rank <= 1 && !S.meetDone) {S.meetPending = true; html += '<div class="row" style="margin:6px 0"><button class="btn warn" data-a="w_meetopen">📣 Собрание у коуча (обязательно)</button></div>';}
   if (S.st.length) html += '<div style="font-size:12px;color:#9a8fb8">Эффекты: ' + S.st.map(s => s.ic + s.n).join(' · ') + '</div>';
   if (h2 && html) h2.insertAdjacentHTML('afterend', html);};
-const _nd10 = nextDay; nextDay = function () {X2(); if (S.meetPending && !S.meetDone) {S.boss = clamp(S.boss - 4, 0, 100); toast('📣 Вы прогуляли собрание: босс −4', 'bad');} S.meetPending = false; S.meetDone = false; const dd = S.day; const r = _nd10(); if (S && S.day > dd) {const keep = []; S.q.forEach(q => {if (q.day <= S.day) {toast('📌 ' + q.t, Object.values(q.fx).some(v => v < 0) ? 'bad' : 'ok'); ['boss', 'heat', 'cons', 'energy'].forEach(k => {if (q.fx[k]) S[k] = clamp(S[k] + q.fx[k], 0, 100);}); if (q.fx.money) S.money += q.fx.money;} else keep.push(q);}); S.q = keep; renderHud();} return r;};
+const _nd10 = nextDay; nextDay = function () {X2(); const dd = S.day; const r = _nd10(); if (S && S.day > dd) {const keep = []; S.q.forEach(q => {if (q.day <= S.day) {toast('📌 ' + q.t, Object.values(q.fx).some(v => v < 0) ? 'bad' : 'ok'); ['boss', 'heat', 'cons', 'energy'].forEach(k => {if (q.fx[k]) S[k] = clamp(S[k] + q.fx[k], 0, 100);}); if (q.fx.money) S.money += q.fx.money;} else keep.push(q);}); S.q = keep; renderHud();} return r;};
 /* офис: холст с людьми */
 let ofSel = -1, ofRects = [];
 function drawOffice(cv, t) {
@@ -169,5 +167,5 @@ document.addEventListener('click', e => {
 });
 const _hub10 = scrHub; scrHub = function () {_hub10(); X2(); const o = document.querySelector('#scr .opts'); if (o) o.insertAdjacentHTML('beforeend', '<button class="btn" data-a="x_team">🏢 Офис и команда</button><button class="btn" data-a="w_gear" data-v="car">🛍 Магазин (авто, мебель, шмотки)</button>' + (S.st.length ? '<div style="grid-column:1/-1;font-size:12px;color:#9a8fb8">Эффекты: ' + S.st.map(s => s.ic + s.n + ' (' + s.d + ')').join(' · ') + '</div>' : ''));};
 function scrNews() {
-  showScr('<div class="box"><h2>📰 Что нового</h2><p style="color:#ff7adf;font-weight:800">' + TITLE10 + ' · ' + BUILD10 + '</p><h3>В этом обновлении</h3><p>• Деньги добывать сложнее: комиссия и оклады ниже, расходы выше<br>• Логика в звонках: кнопка «🧩 Довод» (легенда, расчёты, время, неудобные вопросы). Эмоции теперь работают слабее<br>• Коучи на холодках поправляют вас прямо в разговоре, а после смены собирают собрание<br>• Новый «Офис»: холст с людьми за столами. На «Пульте» можно нанимать, увольнять, давать выговоры, премии, обучать и менять роли<br>• Соревнования команд раз в 5 дней с призами<br>• В кабинете подписаны зоны: Первая холодка, Вторая холодка, Клоузеры, Мусора, Пульт<br>• Жильцы: заселяйте HR, коллег и сотрудников; ночи с HR (без пошлости) и совместная жизнь<br>• Новые авто, телефоны, одежда и мебель с баффами и дебаффами<br>• Ответы на случайные события дают бафф или дебафф и имеют последствия на следующий день</p><h3>Ранее</h3><p>• Погоняло, позиции, коучи, управляющие, 14 локаций, эпилог</p><div class="row" style="margin-top:8px"><button class="btn pri" data-a="x_close">Понятно</button></div></div>', true); lsSet('cc_news_110', 1);
+  showScr('<div class="box"><h2>📰 Что нового</h2><p style="color:#ff7adf;font-weight:800">' + TITLE10 + ' · ' + BUILD10 + '</p><h3>В этом обновлении</h3><p>• Деньги добывать сложнее: комиссия и оклады ниже, расходы выше<br>• Логика в звонках: кнопка «🧩 Довод» (легенда, расчёты, время, неудобные вопросы). Эмоции теперь работают слабее<br>• Новый «Офис»: холст с людьми за столами. На «Пульте» можно нанимать, увольнять, давать выговоры, премии, обучать и менять роли<br>• Соревнования команд раз в 5 дней с призами<br>• В кабинете подписаны зоны: Первая холодка, Вторая холодка, Клоузеры, Мусора, Пульт<br>• Жильцы: заселяйте HR, коллег и сотрудников; ночи с HR (без пошлости) и совместная жизнь<br>• Новые авто, телефоны, одежда и мебель с баффами и дебаффами<br>• Ответы на случайные события дают бафф или дебафф и имеют последствия на следующий день</p><h3>Ранее</h3><p>• Погоняло, позиции, коучи, управляющие, 14 локаций, эпилог</p><div class="row" style="margin-top:8px"><button class="btn pri" data-a="x_close">Понятно</button></div></div>', true); lsSet('cc_news_130', 1);
 }

@@ -1,4 +1,4 @@
-/* ======== Большой кабинет (build 1.3.0) ======== */
+/* ======== Большой кабинет (build 1.4.0) ======== */
 (function () {
   const rr = (g, x, y, w, h, r) => {g.beginPath(); if (g.roundRect) g.roundRect(x, y, w, h, r); else g.rect(x, y, w, h);};
   const circ = (g, x, y, r, c) => {g.fillStyle = c; g.beginPath(); g.arc(x, y, r, 0, 6.283); g.fill();};
@@ -144,7 +144,7 @@
     for (let i = 0; i < 4; i++) {const lx = w * (.12 + i * .26); g.fillStyle = 'rgba(255,245,200,.1)'; g.beginPath(); g.moveTo(lx, 0); g.lineTo(lx + w * .08, 0); g.lineTo(lx + w * .14, h * .5); g.lineTo(lx - w * .06, h * .5); g.fill(); g.fillStyle = '#d8d4c4'; rr(g, lx, 0, w * .08, 4, 2); g.fill();}
     if (night > 0) {g.fillStyle = 'rgba(8,6,30,' + night * .4 + ')'; g.fillRect(0, 0, w, h);}
     if (S.mode === 'ring') {g.strokeStyle = 'rgba(255,210,58,' + (.4 + Math.sin(t * 12) * .3) + ')'; g.lineWidth = 3; rr(g, 1, 1, w - 2, h - 2, 8); g.stroke();}
-    g.fillStyle = 'rgba(255,255,255,.35)'; g.font = '700 ' + Math.max(7, 7 * u) + 'px sans-serif'; g.textAlign = 'right'; g.fillText('БОЛЬШАЯ ПЕРЕМЕНА · build 1.3.0', w - 6, h - 5);
+    g.fillStyle = 'rgba(255,255,255,.35)'; g.font = '700 ' + Math.max(7, 7 * u) + 'px sans-serif'; g.textAlign = 'right'; g.fillText('ПОСЛЕДНИЙ ЗВОНОК · build 1.4.0', w - 6, h - 5);
   }
   Gfx.scene = scene;
 })();

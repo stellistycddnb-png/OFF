@@ -1,5 +1,6 @@
 /* ======== build 1.6.0 «ПОСЛЕДНИЙ ЗВОНОК»: диалоги с ответами на вопросы клиента, обновления и связь внутри игры, новые клиенты и легенды ======== */
-const BUILD_V = '1.6.0', BUILD_NAME = 'ПОСЛЕДНИЙ ЗВОНОК';
+const BUILD_V = '1.6.1', BUILD_NAME = 'ПОСЛЕДНИЙ ЗВОНОК';
+const TG_UPD = 'https://t.me/SMENAGAME';
 const UPD_URL = 'https://stellistycddnb-png.github.io/PALY-IOS/';
 /* ---------- 1. Логика: клиент задал вопрос → агент отвечает именно на него ---------- */
 const INTENT_RX = [
@@ -79,7 +80,7 @@ async function fetchLatest() {
 }
 const diagText = () => 'КОЛ-ЦЕНТР: СМЕНА · build ' + BUILD_V + ' «' + BUILD_NAME + '»\nУстройство: ' + navigator.userAgent + '\nЭкран: ' + innerWidth + 'x' + innerHeight + (S ? '\nДень: ' + S.day + ', ранг: ' + S.rank + ', деньги: ' + Math.round(S.money) : '');
 function devHTML(from) {
-  return '<div class="box" data-from="' + from + '"><h2>📨 Связь и обновления</h2><p style="color:#ff7adf;font-weight:800;margin:0">build ' + BUILD_V + ' · ' + BUILD_NAME + '</p><div id="updst" class="dil" style="margin:8px 0"><p>Нажмите «Проверить обновления», чтобы узнать, вышел ли новый патч.</p></div><div class="col"><button class="btn pri" data-a="upd_check">🔄 Проверить обновления</button><a class="btn" href="' + TG_USER_URL + '" target="_blank" rel="noopener">✉ Написать разработчику ' + TG_USER + '</a><a class="btn" href="' + TG_CHANNEL + '" target="_blank" rel="noopener">📣 Канал с новостями и патчами</a><button class="btn" data-a="dev_bug">🐞 Сообщить об ошибке</button><button class="btn" data-a="dev_idea">💡 Предложить идею</button></div><div class="row" style="margin-top:8px"><button class="btn" data-a="back">← Назад</button></div></div>';
+  return '<div class="box" data-from="' + from + '"><h2>📨 Связь и обновления</h2><p style="color:#ff7adf;font-weight:800;margin:0">build ' + BUILD_V + ' · ' + BUILD_NAME + '</p><div id="updst" class="dil" style="margin:8px 0"><p>Нажмите «Проверить обновления», чтобы узнать, вышел ли новый патч.</p></div><div class="col"><button class="btn pri" data-a="upd_check">🔄 Проверить обновления</button><a class="btn" href="' + TG_USER_URL + '" target="_blank" rel="noopener">✉ Написать разработчику ' + TG_USER + '</a><a class="btn" href="' + TG_UPD + '" target="_blank" rel="noopener">🔔 Канал обновлений (APK и патчи)</a><a class="btn" href="' + TG_CHANNEL + '" target="_blank" rel="noopener">📣 Личный канал PESSIMIST</a><button class="btn" data-a="dev_bug">🐞 Сообщить об ошибке</button><button class="btn" data-a="dev_idea">💡 Предложить идею</button></div><div class="row" style="margin-top:8px"><button class="btn" data-a="back">← Назад</button></div></div>';
 }
 function scrDev(from) {showScr(devHTML(from), from !== 'title');}
 async function copyTxt(t) {try {await navigator.clipboard.writeText(t); return true;} catch (e) {try {const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); return true;} catch (e2) {return false;}}}
@@ -89,7 +90,7 @@ async function doUpdCheck(manual) {
     const j = await fetchLatest(); lsSet('cc_updchk', {t: Date.now(), v: j.version});
     if (vnewer(BUILD_V, j.version)) {
       const notes = j.notes ? '<p style="text-align:left">• ' + (Array.isArray(j.notes) ? j.notes.join('<br>• ') : j.notes) + '</p>' : '';
-      if (box) box.innerHTML = '<b>🚀 Вышло обновление ' + j.version + (j.name ? ' «' + j.name + '»' : '') + '</b>' + notes + '<div class="col"><button class="btn pri" data-a="upd_go">⬇ Обновить сейчас (веб-версия)</button><a class="btn" href="' + TG_CHANNEL + '" target="_blank" rel="noopener">📦 Где взять новый APK</a></div>';
+      if (box) box.innerHTML = '<b>🚀 Вышло обновление ' + j.version + (j.name ? ' «' + j.name + '»' : '') + '</b>' + notes + '<div class="col"><button class="btn pri" data-a="upd_go">⬇ Обновить сейчас (веб-версия)</button><a class="btn" href="' + (j.channel || TG_UPD) + '" target="_blank" rel="noopener">📦 Скачать новый APK в канале</a></div>';
       else toast('🚀 Вышло обновление ' + j.version + '! Меню → «Связь и обновления»', 'ok');
     } else if (box) box.innerHTML = '<b>✅ У вас последняя версия</b><p>Установлено ' + BUILD_V + ', на сервере ' + j.version + '.</p>';
   } catch (e) {if (box && manual) box.innerHTML = '<b>📡 Не удалось проверить</b><p>Нужен интернет. Попробуйте позже или загляните в канал разработчика.</p>';}

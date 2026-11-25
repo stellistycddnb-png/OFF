@@ -9,7 +9,7 @@ choose = function (type) {
   const fresh = c.log.splice(n0), main = fresh.find(l => l.w === 'me' && l.t === c.lastLine), rep = fresh.find(l => l.w === 'them' && l.t === c.lastReply);
   const keep = fresh.filter(l => KEEP19.test(l.t) || l === main || l === rep);
   const noise = fresh.find(l => l.w === 'them' && l !== rep && !KEEP19.test(l.t) && INTERJ[c.p.mood] && INTERJ[c.p.mood].includes(l.t));
-  if (noise && rep && Math.random() < .6) {const f = isFem(c.p); rep.t = '«' + noise.t.replace(/^«|»$/g, '').replace(/[.…]+$/, '') + '… ' + rep.t.replace(/^«/, '').replace(/^./, m => m); }
+  if (noise && rep && Math.random() < .4 && !/^«(Допустим|Хм|Ну|Ладно|Нет)/.test(rep.t) && !rep.t.includes('?')) {const f = isFem(c.p); rep.t = '«' + noise.t.replace(/^«|»$/g, '').replace(/[.…]+$/, '') + '… ' + rep.t.replace(/^«/, '').replace(/^./, m => m); }
   if (!main && !rep && !keep.length) fresh.forEach(l => c.log.push(l)); else keep.forEach(l => c.log.push(l));
   if (typeof render === 'function' && S.call === c && S.mode === 'call') render();
 };

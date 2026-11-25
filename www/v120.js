@@ -1,7 +1,7 @@
-/* ======== build 1.6.0 «ПОСЛЕДНИЙ ЗВОНОК»: диалоги с ответами на вопросы клиента, обновления и связь внутри игры, новые клиенты и легенды ======== */
-const BUILD_V = '1.6.1', BUILD_NAME = 'ПОСЛЕДНИЙ ЗВОНОК';
+/* ======== build 1.6.0 «ЗОЛОТОЙ КОРПОРАТИВ»: диалоги с ответами на вопросы клиента, обновления и связь внутри игры, новые клиенты и легенды ======== */
+const BUILD_V = '1.7.0', BUILD_NAME = 'ЗОЛОТОЙ КОРПОРАТИВ';
 const TG_UPD = 'https://t.me/SMENAGAME';
-const UPD_URL = 'https://stellistycddnb-png.github.io/PALY-IOS/';
+const UPD_URL = 'https://raw.githubusercontent.com/stellistycddnb-png/OFF/main/www/';
 /* ---------- 1. Логика: клиент задал вопрос → агент отвечает именно на него ---------- */
 const INTENT_RX = [
   ['real', /(развод|обман|скам|мошенник|бред|нелепо|придумал|не верится|не сходится)/i],
@@ -35,7 +35,7 @@ lineFor = function (c, type, st) {
   const keepM = c.mention; t = fillN(t, c).replace(/\{company\}/g, COMPANY).replace(/\{amt\}/g, c.amt);
   if (k === 'who') t = t.replace(/»$/, ' Звоню по поводу: ' + fillN('{thing}', c) + '.»');
   t = gx(t, false);
-  if (live) {window.__commit = false; c.lastType = type; c.lastLine = t; c.greeted = true; c.pend = null; c.pers += 5; c.answered = (c.answered || 0) + 1;} else c.mention = keepM;
+  if (live) {window.__commit = false; c.lastType = type; c.lastLine = t; c.greeted = true; c.pend = null; c.pers += 5; c.answered = (c.answered || 0) + 1; c.lastAns = k;} else c.mention = keepM;
   return t;
 };
 const _ch20 = choose;
@@ -75,7 +75,7 @@ const vnewer = (a, b) => {const x = vnum(a), y = vnum(b); for (let i = 0; i < 3;
 async function fetchLatest() {
   const bust = '?t=' + Date.now();
   try {const r = await fetch(UPD_URL + 'version.json' + bust, {cache: 'no-store'}); if (r.ok) {const j = await r.json(); if (j && j.version) return j;}} catch (e) {}
-  const r = await fetch(UPD_URL + 'index.html' + bust, {cache: 'no-store'}); if (!r.ok) throw new Error('http ' + r.status);
+  const r = await fetch(UPD_URL + 'data.js' + bust, {cache: 'no-store'}); if (!r.ok) throw new Error('http ' + r.status);
   const t = await r.text(), m = t.match(/const VERSION = '[^']*build (\d+\.\d+\.\d+)/) || t.match(/build (\d+\.\d+\.\d+)/); if (!m) throw new Error('no version'); return {version: m[1]};
 }
 const diagText = () => 'КОЛ-ЦЕНТР: СМЕНА · build ' + BUILD_V + ' «' + BUILD_NAME + '»\nУстройство: ' + navigator.userAgent + '\nЭкран: ' + innerWidth + 'x' + innerHeight + (S ? '\nДень: ' + S.day + ', ранг: ' + S.rank + ', деньги: ' + Math.round(S.money) : '');
@@ -84,13 +84,14 @@ function devHTML(from) {
 }
 function scrDev(from) {showScr(devHTML(from), from !== 'title');}
 async function copyTxt(t) {try {await navigator.clipboard.writeText(t); return true;} catch (e) {try {const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); return true;} catch (e2) {return false;}}}
+const a_go = '<button class="btn pri" data-a="upd_go">⬇ Обновить сейчас (веб-версия)</button>';
 async function doUpdCheck(manual) {
   const box = document.getElementById('updst'); if (manual && box) box.innerHTML = '<p>⏳ Проверяю…</p>';
   try {
     const j = await fetchLatest(); lsSet('cc_updchk', {t: Date.now(), v: j.version});
     if (vnewer(BUILD_V, j.version)) {
       const notes = j.notes ? '<p style="text-align:left">• ' + (Array.isArray(j.notes) ? j.notes.join('<br>• ') : j.notes) + '</p>' : '';
-      if (box) box.innerHTML = '<b>🚀 Вышло обновление ' + j.version + (j.name ? ' «' + j.name + '»' : '') + '</b>' + notes + '<div class="col"><button class="btn pri" data-a="upd_go">⬇ Обновить сейчас (веб-версия)</button><a class="btn" href="' + (j.channel || TG_UPD) + '" target="_blank" rel="noopener">📦 Скачать новый APK в канале</a></div>';
+      if (box) box.innerHTML = '<b>🚀 Вышло обновление ' + j.version + (j.name ? ' «' + j.name + '»' : '') + '</b>' + notes + '<div class="col">' + '' + '<a class="btn" href="' + (j.channel || TG_UPD) + '" target="_blank" rel="noopener">📦 Скачать новый APK в канале</a>' + (window.Capacitor ? '<p>Скачайте APK в канале и установите его поверх старой версии.</p>' : '') + '</div>';
       else toast('🚀 Вышло обновление ' + j.version + '! Меню → «Связь и обновления»', 'ok');
     } else if (box) box.innerHTML = '<b>✅ У вас последняя версия</b><p>Установлено ' + BUILD_V + ', на сервере ' + j.version + '.</p>';
   } catch (e) {if (box && manual) box.innerHTML = '<b>📡 Не удалось проверить</b><p>Нужен интернет. Попробуйте позже или загляните в канал разработчика.</p>';}

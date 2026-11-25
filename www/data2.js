@@ -69,9 +69,9 @@ const BLUFF_LINES = ['«Я старший специалист службы бе
 const stageOf = c => {const r = c.pers / c.target; return r < .3 ? 0 : r < .55 ? 1 : r < .8 ? 2 : 3;};
 /* ======== 1.5.0: логичные диалоги — реплики зависят от характера, этапа, действия и предыдущей фразы ======== */
 const isFem = p => /(а|я)$/.test(p.name.split(' ')[0]) && !/^(Никита|Илья)/.test(p.name);
-const gx = (t, f) => t.replace(/\(ась\)/g, f ? 'ась' : '').replace(/\(ла\)/g, f ? 'ла' : '').replace(/\(на\)/g, f ? 'на' : '').replace(/\(а\)/g, f ? 'а' : '');
+const gx = (t, f) => t.replace(/должен\(на\)/g, f ? 'должна' : 'должен').replace(/\(ась\)/g, f ? 'ась' : '').replace(/\(ла\)/g, f ? 'ла' : '').replace(/\(на\)/g, f ? 'на' : '').replace(/\(а\)/g, f ? 'а' : '');
 const SHORT = {'пожизненный запас картошки': 'картошка', 'утечка холода в вашем холодильнике': 'холодильник', 'налоговый статус вашего кота': 'кот', 'путёвка на Луну': 'Луна', 'просроченная тень': 'тень', 'награда вашему шлёпанцу': 'шлёпанец', 'незарегистрированное облако': 'облако', 'дело о вашем тапке': 'тапок', 'донос от чайника': 'чайник', 'дело о тумане': 'туман', 'розыск носка': 'носок', 'дело о диване': 'диван'};
-const fillN = (t, c) => {c.mention = c.mention || 0; const inf = c.info, hasT = t.indexOf('{thing}') >= 0; if (hasT) c.mention++; const i2 = c.mention > 2 && SHORT[inf.thing] ? Object.assign({}, inf, {thing: SHORT[inf.thing]}) : inf; return fillT(t, i2).replace(/\{name\}/g, c.p.name.split(' ')[0]).replace(/\{full\}/g, c.p.name);};
+const fillN = (t, c) => {c.mention = c.mention || 0; const inf = c.info, hasT = t.indexOf('{thing}') >= 0; if (hasT) c.mention++; if (hasT && c.mention > 2 && /[:—] \{thing\}[.!?]*»?$/.test(t)) t = t.replace(/[:—] \{thing\}([.!?]*»?)$/, '$1').replace(/\{thing\}/g, inf.thing); const i2 = c.mention > 2 && SHORT[inf.thing] ? Object.assign({}, inf, {thing: SHORT[inf.thing]}) : inf; return fillT(t, i2).replace(/\{name\}/g, c.p.name.split(' ')[0]).replace(/\{full\}/g, c.p.name);};
 const pickU = (c, arr) => {c.said = c.said || []; const fresh = arr.filter(x => !c.said.includes(x)); const r = pick(fresh.length ? fresh : arr); c.said.push(r); return r;};
 // реплики клиента по характеру: [этап][0 = убеждён, 1 = сомневается]
 const REPLY_MOOD = {
@@ -135,10 +135,12 @@ let lineFor = (c, type, st) => {
 };
 let replyFor = (c, good, st) => {
   c.lastGood = good; const f = isFem(c.p); let r; if (c.turn > 1 && st === 0) st = 1;
+  if (c.lastAns && typeof ANS_REACT !== 'undefined' && ANS_REACT[c.lastAns] && Math.random() < .8) {const k = c.lastAns; c.lastAns = null; r = pickU(c, ANS_REACT[k][good ? 0 : 1]).replace(/\{company\}/g, COMPANY).replace(/\{amt\}/g, c.amt || 99); r = fillN(r, c).replace(/^«([а-яё])/, (m, ch) => '«' + ch.toUpperCase()); return c.lastReply = gx(r, f);}
+  c.lastAns = null;
   if (c.p.mood === 'cop') r = pickU(c, REPLY_MOOD.cop[st][good ? 0 : 1]);
   else if (c.pol) r = pickU(c, good ? REPLY_ST.polGood : REPLY_ST.polBad);
   else {const ty = c.lastType, mine = REPLY_MOOD[c.p.mood] && REPLY_MOOD[c.p.mood][st][good ? 0 : 1], react = ty && REACT[ty] && REACT[ty][good ? 0 : 1];
-    const mm = REPLY_MOOD[c.p.mood], pool = mm ? [].concat(mm[st][good ? 0 : 1], mm[Math.min(3, st + 1)][good ? 0 : 1], mm[Math.max(0, st - 1)][good ? 0 : 1]) : null;
+    const mm = REPLY_MOOD[c.p.mood], g2 = good ? 0 : 1, pool = mm ? (c.turn <= 1 ? mm[0][g2] : [].concat(mm[st][g2], mm[Math.min(3, st + 1)][g2], mm[Math.max(1, st - 1)][g2])) : null;
     r = Math.random() < .35 && react ? pickU(c, react) : pool ? pickU(c, pool) : pick(REPLY_ST[good ? 'good' : 'bad'][st]);}
   r = fillN(r, c).replace(/^«([а-яё])/, (m, ch) => '«' + ch.toUpperCase());
   return c.lastReply = gx(r, f);

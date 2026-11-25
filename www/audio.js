@@ -19,6 +19,7 @@ const Snd = (() => {
     else if (n === 'pick') {osc(t, 300, .08, 'triangle', .25, o, 500); noise(t, .06, .15, o, 'bandpass', 1500);}
     else if (n === 'hang') {osc(t, 420, .18, 'triangle', .25, o, 160);}
     else if (n === 'cash') {[0, 7, 12].forEach((k, i) => osc(t + i * .07, hz(84 + k), .22, 'sine', .22, o)); noise(t, .1, .12, o, 'highpass', 6000);}
+    else if (n === 'bell') {[[1, .5, 1.6], [2.76, .28, 1.1], [5.4, .16, .7], [8.93, .08, .4]].forEach(([m, v, d]) => osc(t, 1318 * m, d, 'sine', v * .5, o)); osc(t + .002, 2637, .5, 'triangle', .06, o);}
     else if (n === 'bad') {osc(t, 150, .3, 'sawtooth', .2, o, 70);}
     else if (n === 'good') {[0, 4, 7, 12].forEach((k, i) => osc(t + i * .09, hz(67 + k), .4, 'triangle', .2, o));}
     else if (n === 'sad') {[0, -2, -5].forEach((k, i) => osc(t + i * .28, hz(62 + k), .7, 'sine', .22, o));}

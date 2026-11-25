@@ -219,7 +219,19 @@ a.btn{text-decoration:none}a.btn:visited{color:inherit}
 #intro .i-name2{margin-top:6px;font:900 13px Impact,sans-serif;letter-spacing:.35em;color:#ff7adf;text-shadow:0 0 12px rgba(255,58,200,.6);opacity:0;animation:fi 1s 4.6s forwards}
 #intro .i-load{margin-top:16px;width:min(70vw,260px);height:5px;border-radius:5px;background:rgba(255,255,255,.1);overflow:hidden;opacity:0;animation:fi .5s 3.2s forwards}#intro .i-load i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffd23a,#ff3ac8,#5dffc0);box-shadow:0 0 12px rgba(255,210,58,.7);animation:ild 4.2s 3.2s ease-out forwards}@keyframes ild{to{width:100%}}
 #intro .i-cap{margin-top:8px;min-height:16px;font-size:11px;letter-spacing:.14em;color:#b8a8d8;opacity:.9}
-#app.incall #scene{height:21vh;min-height:130px;transition:height .25s}
-#app.incall #hud{padding-bottom:4px}
 .btn:active{transform:scale(.97);filter:brightness(1.12)}
 #main .me{border-left:3px solid #ffd23a}#main .them{border-left:3px solid #7ff3ff}
+.box.hbox{max-width:560px;padding:8px}
+.box.hbox #hmc{border-radius:14px}
+.box.hbox .opts{grid-template-columns:repeat(2,1fr);gap:8px}
+@media (min-width:700px){.box.hbox{max-width:760px}}
+#intro .i-beams{position:absolute;left:50%;top:-30%;width:160vmax;height:160vmax;transform:translateX(-50%);background:conic-gradient(from 0deg,transparent 0 8%,rgba(255,58,200,.16) 10%,transparent 13% 38%,rgba(93,255,192,.14) 40%,transparent 43% 58%,rgba(255,210,58,.12) 60%,transparent 63% 88%,rgba(127,243,255,.14) 90%,transparent 93%);opacity:0;animation:fi 1s 2.1s forwards,ibm 14s linear infinite;pointer-events:none;mix-blend-mode:screen}
+@keyframes ibm{to{transform:translateX(-50%) rotate(360deg)}}
+#intro .i-grid{position:absolute;left:-50%;right:-50%;bottom:0;height:46%;background:linear-gradient(transparent,rgba(255,58,200,.18)),repeating-linear-gradient(90deg,rgba(255,58,200,.45) 0 1px,transparent 1px 48px),repeating-linear-gradient(0deg,rgba(255,58,200,.45) 0 1px,transparent 1px 34px);transform:perspective(380px) rotateX(62deg);transform-origin:50% 100%;opacity:0;animation:fi 1.4s 2.4s forwards,igm 1.6s 2.4s linear infinite;-webkit-mask-image:linear-gradient(transparent,#000 40%);mask-image:linear-gradient(transparent,#000 40%);pointer-events:none}
+@keyframes igm{to{background-position:0 0,0 0,0 34px}}
+#intro .i-shock{position:absolute;left:50%;top:46%;pointer-events:none}#intro .i-shock i{position:absolute;left:-10px;top:-10px;width:20px;height:20px;border-radius:50%;border:3px solid #ff3ac8;opacity:0;box-shadow:0 0 24px #ff3ac8}
+#intro .i-shock i:nth-child(1){animation:ish 1.3s 2.55s ease-out}#intro .i-shock i:nth-child(2){animation:ish 1.3s 2.8s ease-out;border-color:#7ff3ff;box-shadow:0 0 24px #7ff3ff}#intro .i-shock i:nth-child(3){animation:ish 1.3s 3.05s ease-out;border-color:#ffd23a;box-shadow:0 0 24px #ffd23a}
+@keyframes ish{0%{transform:scale(1);opacity:.9}100%{transform:scale(34);opacity:0}}
+#intro .i-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;animation:ifl .7s 6.8s ease-in forwards,ifl2 .25s 2.5s ease-out}
+@keyframes ifl{to{opacity:.85}}@keyframes ifl2{0%{opacity:.5}100%{opacity:0}}
+#intro .i-main{animation:fi .3s 2s forwards,ipush 7s 2s ease-in forwards}@keyframes ipush{to{transform:scale(1.08)}}

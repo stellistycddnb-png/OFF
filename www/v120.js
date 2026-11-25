@@ -1,5 +1,5 @@
 /* ======== build 1.6.0 «ЗОЛОТОЙ КОРПОРАТИВ»: диалоги с ответами на вопросы клиента, обновления и связь внутри игры, новые клиенты и легенды ======== */
-const BUILD_V = '1.7.0', BUILD_NAME = 'ЗОЛОТОЙ КОРПОРАТИВ';
+const BUILD_V = '1.9.2', BUILD_NAME = 'ЗОЛОТОЙ КОРПОРАТИВ';
 const TG_UPD = 'https://t.me/SMENAGAME';
 const UPD_URL = 'https://raw.githubusercontent.com/stellistycddnb-png/OFF/main/www/';
 /* ---------- 1. Логика: клиент задал вопрос → агент отвечает именно на него ---------- */

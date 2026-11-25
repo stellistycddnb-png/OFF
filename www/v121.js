@@ -79,6 +79,7 @@ function corpApply(v) {
   showScr('<div class="box corp"><div class="corp-hd small"><div class="corp-ic">' + CORPS[d].ic + '</div></div><h2>Итоги вечера</h2><p>' + o.t + '</p><div class="chips">' + fxChips(f) + '</div><div class="row"><button class="btn pri" data-a="corp_done">Продолжить смену</button></div></div>', true); Snd.sfx(((f.boss || 0) + (f.energy || 0) / 4) >= 0 ? 'good' : 'bad'); renderHud();
 }
 function corpDone() {
+  if (window.__fromHome) {window.__fromHome = false; hideScr(); if (S.cons <= 0) return ending('conscience'); if (S.heat >= 100) return ending('raid'); if (S.boss <= 0) return ending('fired'); renderHud(); save(); return scrHome();}
   hideScr(); if (S.cons <= 0) return ending('conscience'); if (S.heat >= 100) return ending('raid'); if (S.boss <= 0) return ending('fired');
   S.mode = 'idle'; running = true; T0 = performance.now(); render(); save();
 }
@@ -87,7 +88,7 @@ const _nd21 = nextDay; nextDay = function () {_nd21(); if (S && S.mode === 'idle
 /* ---------- 5. Новое интро: телефон, город, прогресс ---------- */
 (function () {
   const it = document.getElementById('intro'); if (!it) return;
-  it.insertAdjacentHTML('afterbegin', '<div class="i-city"><div class="i-lay l1"></div><div class="i-lay l2"></div></div><div class="i-phone"><div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div><span>☎</span></div><div class="i-sparks"></div>');
+  it.insertAdjacentHTML('afterbegin', '<div class="i-beams"></div><div class="i-grid"></div><div class="i-shock"><i></i><i></i><i></i></div><div class="i-flash"></div><div class="i-city"><div class="i-lay l1"></div><div class="i-lay l2"></div></div><div class="i-phone"><div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div><span>☎</span></div><div class="i-sparks"></div>');
   const m = it.querySelector('.i-main'); if (m) m.insertAdjacentHTML('beforeend', '<div class="i-name2">«' + BUILD_NAME2 + '»</div><div class="i-load"><i></i></div><div class="i-cap" id="iCap"></div>');
   const mk = (el, n, seed, hmin, hmax) => {let x = 0, s = seed, r = () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296, h = ''; while (x < 130) {const w = 3 + r() * 5, ht = hmin + r() * (hmax - hmin); h += '<b style="left:' + x + '%;width:' + w + '%;height:' + ht + 'px"></b>'; x += w + .6;} el.innerHTML = h;};
   mk(it.querySelector('.l1'), 0, 3, 60, 150); mk(it.querySelector('.l2'), 0, 11, 30, 95);
@@ -96,7 +97,4 @@ const _nd21 = nextDay; nextDay = function () {_nd21(); if (S && S.mode === 'idle
 })();
 
 /* ---------- 6. Что нового ---------- */
-const _sn21 = scrNews; scrNews = function () {_sn21(); const p = document.querySelector('#scr .box p'); if (p) p.textContent = BUILD_NAME2 + ' · build 1.7.0'; const h3 = document.querySelector('#scr .box h3'); if (h3) h3.insertAdjacentHTML('beforebegin', '<h3>🪩 Золотой корпоратив</h3><p>• Корпоративы по календарю: караоке, день рождения шефа, тимбилдинг, день компании, Новый год, банкет<br>• 15 новых случайных событий<br>• Диалоги 2.0: вопрос → ответ → реакция клиента<br>• Колокольчик при удачном «закрытии» (не каждый раз)<br>• Новое интро и обновлённый дизайн</p>');};
-/* ---------- 7. Компактная сцена во время звонка, чтобы кнопки ответов были видны сразу ---------- */
-const _rn21 = render;
-render = function () {_rn21(); const a = document.getElementById('app'); if (!a) return; const on = !!S && S.mode === 'call'; if (a.classList.contains('incall') !== on) {a.classList.toggle('incall', on); setTimeout(() => window.dispatchEvent(new Event('resize')), 30);}};
+const _sn21 = scrNews; scrNews = function () {_sn21(); const p = document.querySelector('#scr .box p'); if (p) p.textContent = BUILD_NAME2 + ' · build 1.7.0'; const h3 = document.querySelector('#scr .box h3'); if (h3) h3.insertAdjacentHTML('beforebegin', '<h3>🪩 Золотой корпоратив</h3><p>• Корпоративы по календарю: караоке, день рождения шефа, тимбилдинг, день компании, Новый год, банкет<br>• 15 новых случайных событий<br>• Диалоги 2.0: вопрос → ответ → реакция клиента<br>• Колокольчик при удачном «закрытии» (не каждый раз)<br>• Новое интро и обновлённый дизайн<br>• «Дом 3.0»: дела по дому, домашняя вечеринка, новая мебель (стены, музыка, умный дом)<br>• 6 новых питомцев: попугай, кролик, черепаха, ёж, енот, лис. Они бегают по дому, а с ними можно играть. Лимит питомцев — 5</p>');};

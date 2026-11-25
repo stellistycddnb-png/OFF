@@ -1,5 +1,5 @@
-/* ======== БОЛЬШАЯ ПЕРЕМЕНА · build 1.7.0 ======== */
-const BUILD10 = 'build 1.7.0', TITLE10 = 'ЗОЛОТОЙ КОРПОРАТИВ', ECON = .72;
+/* ======== БОЛЬШАЯ ПЕРЕМЕНА · build 1.9.2 ======== */
+const BUILD10 = 'build 1.9.2', TITLE10 = 'ЗОЛОТОЙ КОРПОРАТИВ', ECON = .72;
 const X2 = () => {X1(); if (!S.gear) S.gear = {}; if (!S.eq) S.eq = {}; if (!S.st) S.st = []; if (!S.q) S.q = []; if (!S.cand) S.cand = null; if (S.teamAcc === undefined) S.teamAcc = 0; if (!S.desks) S.desks = 8; if (S.maxRank >= 4 && !S.staff) mkStaff(); return S;};
 /* ---------- снаряжение с баффами и дебаффами ---------- */
 const FXN = {talk: ['убеждение', 1], calm: ['подозрение', -1], en: ['энергия в день', 1], inc: ['доход', 100], heat: ['риск в день', 1], cons: ['совесть в день', 1], boss: ['босс в день', 1]};

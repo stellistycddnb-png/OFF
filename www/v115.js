@@ -194,7 +194,7 @@ function hDoAct(i) {
   const el = document.getElementById('hmsg'); if (el && msg) {el.style.display = 'block'; el.innerHTML = msg;} hStat(); hPanel(true);
 }
 /* --- экран --- */
-function hStat() {const el = document.getElementById('hstat'); if (!el) return; const h = H(); el.innerHTML = '🛏 ' + HOUSES[S.life.h].n + ' · Уют ' + comfortScore() + '/21 · Стиль ' + styleScore() + '/9 · ' + CARS[h.car].ic + '<br>⚡ ' + Math.round(S.energy) + ' · 💰 ' + fmt(S.money) + ' · 🏠 жильцов ' + S.rm.length + '/' + rmCap() + (h.gf ? ' · ❤ ' + HRS.find(x => x.id === h.gf).n : '');}
+function hStat() {const el = document.getElementById('hstat'); if (!el) return; const h = H(); el.innerHTML = '🛏 ' + HOUSES[S.life.h].n + ' · Уют ' + comfortScore() + '/'+(Object.keys(FURN).length*3)+' · Стиль ' + styleScore() + '/9 · ' + CARS[h.car].ic + '<br>⚡ ' + Math.round(S.energy) + ' · 💰 ' + fmt(S.money) + ' · 🏠 жильцов ' + S.rm.length + '/' + rmCap() + (h.gf ? ' · ❤ ' + HRS.find(x => x.id === h.gf).n : '');}
 function scrHome(from) {
   X3(); const h = H(); if (from) h.from = from; HM.from = h.from; hSync(); const gen = ++HM.gen; HM.path = []; HM.keys = {}; HM.target = null;
   if (!hOpen(hRoomAt(HM.x, HM.y))) {HM.x = 590; HM.y = 330;} if (HM.lastDay !== S.day && S.rm.length) {HM.lastDay = S.day; HM.greet = 1;}

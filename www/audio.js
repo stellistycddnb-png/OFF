@@ -47,13 +47,35 @@ const Snd = (() => {
     else if (n === 'cheer') {noise(t, .9, .13, o, 'bandpass', 1800, 900); [0, 4, 7].forEach(k => osc(t, hz(67 + k), .6, 'triangle', .1, o));}
     else if (n === 'typing') {for (let i = 0; i < 5; i++) noise(t + i * .055 + Math.random() * .02, .025, .14, o, 'highpass', 3500 + Math.random() * 1500);}
     else if (n === 'printer') {for (let i = 0; i < 8; i++) noise(t + i * .07, .05, .06, o, 'bandpass', 900, 500);}
+    else if (n === 'step') noise(t, .045, .09, o, 'lowpass', 700, 250);
+    else if (n === 'swish') noise(t, .18, .09, o, 'bandpass', 900, 2600);
+    else if (n === 'pop') {osc(t, 500, .07, 'sine', .2, o, 1100);}
+    else if (n === 'tick') osc(t, 1500, .02, 'square', .05, o);
+    else if (n === 'boom') {osc(t, 90, .9, 'sine', .45, o, 30); noise(t, .6, .3, o, 'lowpass', 900, 80);}
+    else if (n === 'sparkle') {[0, 4, 7, 12, 16, 19].forEach((k, i) => osc(t + i * .06, hz(84 + k), .25, 'sine', .09, o));}
+    else if (n === 'levelup') {[0, 4, 7, 12, 7, 12, 16].forEach((k, i) => osc(t + i * .08, hz(72 + k), .3, 'square', .08, o)); osc(t + .6, hz(88), .8, 'triangle', .15, o);}
+    else if (n === 'sweep') {for (let i = 0; i < 4; i++) noise(t + i * .16, .14, .12, o, 'bandpass', 2500, 1200);}
+    else if (n === 'purr') {for (let i = 0; i < 12; i++) osc(t + i * .045, 70 + Math.random() * 10, .05, 'sawtooth', .07, o);}
+    else if (n === 'chirp') {[0, 1, 2].forEach(i => osc(t + i * .11, 2200 + i * 300, .08, 'sine', .1, o, 3200));}
+    else if (n === 'thump') {osc(t, 140, .09, 'sine', .3, o, 60); osc(t + .12, 140, .09, 'sine', .25, o, 60);}
+    else if (n === 'splash') {noise(t, .4, .18, o, 'bandpass', 1800, 600); [0, 1, 2].forEach(i => osc(t + .05 + i * .08, 600 + i * 150, .1, 'sine', .08, o, 1000));}
+    else if (n === 'yip') {osc(t, 900, .1, 'sawtooth', .1, o, 1500); osc(t + .13, 1100, .1, 'sawtooth', .09, o, 700);}
+    else if (n === 'snuf') {noise(t, .08, .14, o, 'bandpass', 1400, 900); noise(t + .12, .08, .12, o, 'bandpass', 1400, 900);}
+    else if (n === 'bloop') {osc(t, 250, .25, 'sine', .2, o, 120);}
+    else if (n === 'clink') {osc(t, 3200, .25, 'sine', .08, o); osc(t + .03, 4100, .2, 'sine', .06, o);}
+    else if (n === 'fanfare') {[[0, 0], [0, .15], [4, .3], [7, .45], [12, .6]].forEach(([k, d]) => osc(t + d, hz(67 + k), .35, 'sawtooth', .09, o)); [0, 4, 7, 12].forEach(k => osc(t + .7, hz(67 + k), 1, 'triangle', .1, o));}
+    else if (n === 'drum') {noise(t, .1, .25, o, 'lowpass', 600, 200); osc(t, 180, .12, 'sine', .3, o, 80);}
+    else if (n === 'rooster') {[[600, 0], [800, .15], [700, .3], [900, .5]].forEach(([f, d]) => osc(t + d, f, .22, 'sawtooth', .07, o, f * 1.3));}
+    else if (n === 'ding') {osc(t, 1760, .6, 'sine', .15, o); osc(t, 2640, .4, 'sine', .06, o);}
+    else if (n === 'err') {osc(t, 220, .12, 'square', .12, o); osc(t + .14, 180, .2, 'square', .12, o);}
+    else if (n === 'phone') {for (let i = 0; i < 3; i++) {osc(t + i * .12, 1400, .06, 'sine', .08, o); osc(t + i * .12, 1700, .06, 'sine', .06, o);}}
     else if (n === 'ring1') {for (let i = 0; i < 2; i++) {osc(t + i * .2, 880, .15, 'square', .1, o); osc(t + i * .2, 1100, .15, 'square', .08, o);}}
   }
   function ringStart() {if (ringT) return; sfx('ring1'); ringT = setInterval(() => sfx('ring1'), 1500);}
   function ringStop() {if (ringT) {clearInterval(ringT); ringT = null;}}
   function setMood(m) {mood = m;}
   let ambT = 0;
-  function amb() {if (!ac || !on || sv <= 0 || ac.currentTime < ambT) return; ambT = ac.currentTime + 1.2 + Math.random() * 2.5; const t = ac.currentTime; noise(t, .5 + Math.random() * .6, .035, sG, 'bandpass', 350 + Math.random() * 400, 250); if (Math.random() < .12) {osc(t + .1, 1300, .08, 'square', .02, sG); osc(t + .3, 1300, .08, 'square', .02, sG);} if (Math.random() < .35) noise(t + .2, .03, .05, sG, 'highpass', 4000); if (Math.random() < .08) for (let i = 0; i < 8; i++) noise(t + i * .07, .05, .035, sG, 'bandpass', 900, 500); if (Math.random() < .07) osc(t, 1800, .08, 'sine', .035, sG, 2600); if (Math.random() < .06) noise(t, .12, .06, sG, 'lowpass', 500, 120);}
+  function amb() {if (!ac || !on || sv <= 0 || ac.currentTime < ambT) return; ambT = ac.currentTime + 1.2 + Math.random() * 2.5; const t = ac.currentTime; noise(t, .5 + Math.random() * .6, .035, sG, 'bandpass', 350 + Math.random() * 400, 250); if (Math.random() < .12) {osc(t + .1, 1300, .08, 'square', .02, sG); osc(t + .3, 1300, .08, 'square', .02, sG);} if (Math.random() < .35) noise(t + .2, .03, .05, sG, 'highpass', 4000); if (Math.random() < .08) for (let i = 0; i < 8; i++) noise(t + i * .07, .05, .035, sG, 'bandpass', 900, 500); if (Math.random() < .07) osc(t, 1800, .08, 'sine', .035, sG, 2600); if (Math.random() < .06) noise(t, .12, .06, sG, 'lowpass', 500, 120); if (Math.random() < .08) sfx('phone'); if (Math.random() < .05) sfx('tick'); if (Math.random() < .05) sfx('paper');}
   function sched() {amb();
     if (!ac || !on || ac.state !== 'running' || mv <= 0) return; const sd = 60 / 78 / 4;
     while (nextT < ac.currentTime + .25) {note(step, nextT); nextT += sd; step++;}

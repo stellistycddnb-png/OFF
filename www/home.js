@@ -33,7 +33,7 @@ const ACTS = {
   gift: {n: '🎁 Подарок', cost: 300, aff: [7, 12], ann: 15},
   honest: {n: '🤝 Честный разговор', cost: 0, aff: [5, 9], ann: 10},
   date: {n: '🌹 Свидание', cost: 600, aff: [12, 18], ann: 20, min: 55},
-  home: {n: '🏠 Пригласить к себе', cost: 300, aff: [10, 15], ann: 25, min: 75}
+  home: {n: '🏠 Пригласить к себе', cost: 0, aff: [10, 15], ann: 25, min: 75}
 };
 const H = () => {if (!S.home) S.home = {f: {}, w: {}, car: 0, hr: {}, gf: null, eve: 0, log: ''}; HRS.forEach(g => {if (!S.home.hr[g.id]) S.home.hr[g.id] = {aff: 0, ann: 0, dates: 0, blocked: false, today: 0, last: 0};}); return S.home;};
 const tier = (grp, k) => (H()[grp][k] || 0);

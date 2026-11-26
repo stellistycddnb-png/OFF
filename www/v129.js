@@ -75,10 +75,10 @@
   /* кнопка «Сделать предложение» на экране знакомств */
   const _sd = window.scrDates;
   const obs = new MutationObserver(() => {
-    if (!S) return; const h = H(); if (!h.dgf || h.wife) return; const box = document.querySelector('#scr .box.hbox'); if (!box || box.querySelector('[data-a="wed_go"]')) return;
+    if (!S) return; const h = H(); if (!h.dgf || h.wife) return; const box = document.querySelector('#scr .box.hbox'); if (!box || box.querySelector('[data-a="wed_go"],.wedhint')) return;
     const btn = box.querySelector('[data-a="dt"][data-v^="' + h.dgf + ':bye"]'); if (!btn) return; const x = (h.dates || []).find(y => y.id === h.dgf); if (!x) return;
     if (x.aff >= 95 && (x.vis || 0) >= 2) btn.insertAdjacentHTML('beforebegin', '<button class="btn pri" data-a="wed_go" data-v="' + h.dgf + '">💍 Сделать предложение</button>');
-    else btn.insertAdjacentHTML('beforebegin', '<small style="width:100%;color:#9a8fb8">💍 Предложение: симпатия 95+ и 2 вечера дома (сейчас ' + Math.round(x.aff) + ', вечеров ' + (x.vis || 0) + ')</small>');
+    else btn.insertAdjacentHTML('beforebegin', '<small class="wedhint" style="width:100%;color:#9a8fb8">💍 Предложение: симпатия 95+ и 2 вечера дома (сейчас ' + Math.round(x.aff) + ', вечеров ' + (x.vis || 0) + ')</small>');
   });
   obs.observe(document.getElementById('scr'), {childList: true, subtree: true});
   /* семейные бонусы */

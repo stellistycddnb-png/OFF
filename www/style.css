@@ -235,3 +235,26 @@ a.btn{text-decoration:none}a.btn:visited{color:inherit}
 #intro .i-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;animation:ifl .7s 6.8s ease-in forwards,ifl2 .25s 2.5s ease-out}
 @keyframes ifl{to{opacity:.85}}@keyframes ifl2{0%{opacity:.5}100%{opacity:0}}
 #intro .i-main{animation:fi .3s 2s forwards,ipush 7s 2s ease-in forwards}@keyframes ipush{to{transform:scale(1.08)}}
+
+/* ===== 1.9.4: облегчённое интро (без тяжёлых слоёв) ===== */
+#intro .i-beams{animation:fi 1s 2.1s forwards !important;mix-blend-mode:normal !important;width:110vmax;height:110vmax;opacity:0}
+#intro .i-scan{animation:none !important;mix-blend-mode:normal !important;opacity:.45}
+#intro .i-glow{animation:ig 1.6s 2s forwards !important;width:90vmax;height:90vmax}
+#intro .i-main{animation:fi .3s 2s forwards !important}
+#intro .i-grid{animation:fi 1.4s 2.2s forwards !important}
+#intro .i-shock i{box-shadow:none !important}
+@keyframes ish{0%{transform:scale(1);opacity:.9}100%{transform:scale(12);opacity:0}}
+#intro .i-links a{backdrop-filter:none !important;-webkit-backdrop-filter:none !important;background:rgba(40,30,70,.85)}
+#intro .i-neon{text-shadow:0 0 10px #ff3ac8,0 0 26px #c0189a !important}
+#intro.lite .i-beams,#intro.lite .i-grid,#intro.lite .i-shock,#intro.lite .i-scan,#intro.lite .i-sparks,#intro.lite .i-flash,#intro.lite .i-neon:before,#intro.lite .i-neon:after{display:none !important}
+#intro.lite .i-glow{animation:ig 1.2s 2s forwards !important}
+
+/* ===== 1.9.5: экономия ресурсов ===== */
+.bgpause *{animation-play-state:paused !important}
+
+/* 1.9.6: canvas intro */
+#intro.cv>*:not(canvas):not(.i-main):not(.tap){display:none !important}
+#intro.cv .i-main{position:absolute;left:0;right:0;bottom:7%;top:auto;opacity:1 !important;animation:none !important;transform:none !important;pointer-events:none}
+#intro.cv .i-main>*:not(.i-links){display:none !important}
+#intro.cv .i-links{margin:0;opacity:0;animation:fi 1s 3.2s forwards !important;pointer-events:auto}
+#intro.cv .tap{z-index:3}

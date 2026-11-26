@@ -258,3 +258,9 @@ a.btn{text-decoration:none}a.btn:visited{color:inherit}
 #intro.cv .i-main>*:not(.i-links){display:none !important}
 #intro.cv .i-links{margin:0;opacity:0;animation:fi 1s 3.2s forwards !important;pointer-events:auto}
 #intro.cv .tap{z-index:3}
+
+/* 1.9.7: режимы производительности */
+body.perf1 *:not(.fl):not(.toast):not(canvas){transition:none !important}
+body.perf1 .box,body.perf1 .scr,body.perf1 .btn,body.perf1 .disco,body.perf1 .cft{animation:none !important}
+body.perf2 *{animation:none !important;transition:none !important;box-shadow:none !important;text-shadow:none !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important}
+#difbox .btn{width:100%;margin-bottom:6px}

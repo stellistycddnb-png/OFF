@@ -57,3 +57,9 @@
     requestAnimationFrame(frame);
   } catch (e) {try {document.getElementById('intro').classList.remove('cv');} catch (er) {}}
 })();
+
+/* ---------- Что нового в игре: 1.9.2 → 1.9.6 ---------- */
+(function () {
+  if (typeof scrNews !== 'function') return; const _sn38 = scrNews;
+  scrNews = function () {_sn38(); try {const p = document.querySelector('#scr .box p'); if (p && typeof BUILD_NAME2 !== 'undefined') p.textContent = BUILD_NAME2 + ' · build ' + BUILD_V; const h3 = document.querySelector('#scr .box h3'); if (h3 && !document.querySelector('#scr .newsnew')) h3.insertAdjacentHTML('beforebegin', '<h3 class="newsnew">🆕 Версии 1.9.2 – 1.9.7</h3><p>• 1.9.7: Новая игра+, сложность (Лёгкая/Обычная/Ад), 12 новых достижений с наградой, мини-игра «Лови звонки», 3 сюжетные линии, крупнее жители дома, настройки эффектов<br>• 1.9.6: новое красивое интро PESSIMIST без лагов<br>• 1.9.5: ежедневная награда (серия 7 дней), исправлен сбой в звонке, меньше нагрева в фоне<br>• 1.9.4: исправлено зависание при «Предложить встречаться»<br>• 1.9.3: окно «Вышло обновление» и красная метка<br>• 1.9.2: «Дом 4.0» — жена и гостья ходят по квартире, питомцы с лицами, звуки дома</p>');} catch (e) {}};
+})();

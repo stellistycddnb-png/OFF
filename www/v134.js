@@ -8,12 +8,12 @@
   const HAIR = ['#2a1a10', '#6a3a1a', '#d8a040', '#111', '#8a4a2a'], DRESS = ['#e86a9a', '#6a8ae8', '#e8a040', '#7ac86a', '#b070e0'];
   /* ---------- люди ---------- */
   hPerson = function (g, x, y, me, dir, walk, moving, t, e) {
-    const S0 = .72, top = tier('w', 'top'); let o;
+    const S0 = 1.0, top = tier('w', 'top'); let o;
     if (me) {const near = Object.values(HM.ents).some(q => q.kind !== 'pet' && Math.hypot(q.x - HM.x, q.y - HM.y) < 60); o = {col: ['#6a6a7a', '#e8e8f0', '#1a2a4a', '#2a2a30'][top], pants: top === 3 ? '#15151c' : '#2a2f4a', hair: '#3a2a1a', dir, t: moving ? walk : t, walk: moving ? 1 : 0, mood: near ? 'happy' : 'flat', tie: top === 2 ? '#c8a030' : null, seed: 1};}
     else {const hs = hash(e.key || e.n), fam = String(e.key).indexOf('fam:') === 0, girl = e.rk === 'hr' || fam; o = {dir: e.dir || 1, t: moving ? (e.walk || t) : t, walk: moving ? 1 : 0, mood: e.say ? 'open' : (fam || e.rk === 'hr') ? 'happy' : 'flat', seed: hs % 7, hair: HAIR[hs % 5]};
       if (girl) {o.dress = DRESS[hs % 5]; o.col = o.dress; o.hairStyle = hs % 3 === 0 ? 'bun' : 'long'; o.skin = '#f2cfae';} else {o.col = {tm: '#4a7ac0', st: '#5aa070'}[e.rk] || '#7a7a9a'; o.tie = '#c8a030'; o.pants = '#262a44';}}
     P(g, x, y, S0, o);
-    g.font = '800 10px sans-serif'; g.textAlign = 'center'; g.lineWidth = 3; g.strokeStyle = 'rgba(0,0,0,.8)'; const nm = me ? '★ ' + (S.nick || 'ВЫ') : e.n; g.strokeText(nm, x, y + 16); g.fillStyle = me ? '#ffd23a' : '#fff'; g.fillText(nm, x, y + 16);
+    g.font = '800 10px sans-serif'; g.textAlign = 'center'; g.lineWidth = 3; g.strokeStyle = 'rgba(0,0,0,.8)'; const nm = me ? '★ ' + (S.nick || 'ВЫ') : e.n; g.strokeText(nm, x, y + 21); g.fillStyle = me ? "#ffd23a" : "#fff"; g.fillText(nm, x, y + 21);
     if (!me) {const hh = H(), fam = String(e.key).indexOf('fam:') === 0;
       if (fam && (e.key === 'fam:wife' || Math.sin(t * 2) > -2)) {g.font = '13px sans-serif'; g.fillText('❤', x + 14, y - 52 + Math.sin(t * 3) * 2);} else if (e.rk === 'hr' && hh.gf === (S.rm.find(r => r.key === e.key) || {}).id) {g.font = '13px sans-serif'; g.fillText('❤', x + 14, y - 52 + Math.sin(t * 3) * 2);}
       const txt = e.say || (e.act && !moving ? e.act : ''); if (txt) {g.font = e.say ? '700 11px sans-serif' : '18px sans-serif'; const w = e.say ? g.measureText(txt).width + 14 : 28; g.fillStyle = 'rgba(255,255,255,.95)'; g.beginPath(); g.roundRect ? g.roundRect(x - w / 2, y - 86, w, 22, 8) : g.rect(x - w / 2, y - 86, w, 22); g.fill(); g.fillStyle = '#222'; g.textAlign = 'center'; g.fillText(txt, x, y - 70 + (e.say ? 0 : 2));}}
@@ -29,7 +29,7 @@
   hPet = function (g, e, t) {
     const id = String(e.key).replace('pet:', ''), sp = SP[id]; if (!sp) {g.font = '22px sans-serif'; g.textAlign = 'center'; g.fillText(e.ic, e.x, e.y - 4); return;}
     const mv = e.path && e.path.length, ph = (e.walk || 0) + (mv ? 0 : 0), bob = mv ? Math.abs(Math.sin(t * 13)) * 2.2 : Math.sin(t * 2 + e.x) * .5;
-    g.save(); g.translate(e.x, e.y + 3); g.fillStyle = 'rgba(0,0,0,.28)'; g.beginPath(); g.ellipse(0, 0, sp.rx + 2, 3.5, 0, 0, TAU); g.fill(); g.scale(e.dir || 1, 1);
+    g.save(); g.translate(e.x, e.y + 3); g.fillStyle = 'rgba(0,0,0,.28)'; g.beginPath(); g.ellipse(0, 0, sp.rx + 2, 3.5, 0, 0, TAU); g.fill(); g.scale((e.dir || 1) * 1.35, 1.35);
     const by = -sp.ry - 3 - bob, k = id === 'parrot';
     // хвост
     g.strokeStyle = sp.c; g.fillStyle = sp.c; g.lineCap = 'round';

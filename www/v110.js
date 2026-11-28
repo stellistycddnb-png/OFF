@@ -1,5 +1,5 @@
-/* ======== БОЛЬШАЯ ПЕРЕМЕНА · build 1.9.15 ======== */
-const BUILD10 = 'build 1.9.15', TITLE10 = 'ЗОЛОТОЙ КОРПОРАТИВ', ECON = .72;
+/* ======== БОЛЬШАЯ ПЕРЕМЕНА · build 1.9.20 ======== */
+const BUILD10 = 'build 1.9.20', TITLE10 = 'ЗОЛОТОЙ КОРПОРАТИВ', ECON = .72;
 const X2 = () => {X1(); if (!S.gear) S.gear = {}; if (!S.eq) S.eq = {}; if (!S.st) S.st = []; if (!S.q) S.q = []; if (!S.cand) S.cand = null; if (S.teamAcc === undefined) S.teamAcc = 0; if (!S.desks) S.desks = 8; if (S.maxRank >= 4 && !S.staff) mkStaff(); return S;};
 /* ---------- снаряжение с баффами и дебаффами ---------- */
 const FXN = {talk: ['убеждение', 1], calm: ['подозрение', -1], en: ['энергия в день', 1], inc: ['доход', 100], heat: ['риск в день', 1], cons: ['совесть в день', 1], boss: ['босс в день', 1]};
@@ -132,7 +132,7 @@ function drawOffice(cv, t) {
     if (!empty) {g.fillStyle = col; g.beginPath(); g.roundRect ? g.roundRect(-10, -4, 20, 22, 6) : g.rect(-10, -4, 20, 22); g.fill(); g.fillStyle = skin; g.beginPath(); g.arc(0, -12, 8, 0, 6.28); g.fill(); g.fillStyle = 'rgba(0,0,0,.45)'; g.beginPath(); g.arc(0, -14, 8.4, 3.2, 6.2); g.fill();} else {g.fillStyle = 'rgba(255,255,255,' + (lock ? .06 : .14) + ')'; g.font = '700 14px sans-serif'; g.textAlign = 'center'; g.fillText(lock ? '🔒' : '＋', 0, 4);}
     g.restore(); g.textAlign = 'center'; g.font = '700 11px sans-serif'; if (sel) {g.strokeStyle = '#ffd23a'; g.lineWidth = 2; g.strokeRect(x - 38, y - 30 * sc, 76, 64 * sc);} g.fillStyle = empty ? 'rgba(255,255,255,.25)' : '#e8e0ff'; g.fillText(nm, x, y + 36); if (sub) {g.fillStyle = '#9a8fb8'; g.font = '10px sans-serif'; g.fillText(sub, x, y + 47);}};
   man(119, 40, 1.4, '#e8b898', S.eqCol || '#22263a', '★ ' + (S.nick || 'ВЫ'), '', false, false, false);
-  g.fillStyle = '#ffd23a'; g.font = '800 12px sans-serif'; g.textAlign = 'left'; g.fillText(RK().ic + ' ' + RK().n, 240, 30); g.fillStyle = '#9a8fb8'; g.font = '11px sans-serif'; g.fillText('День ' + S.day + '/' + DAYS + ' · план ' + fmt(planNow()), 240, 50);
+  g.fillStyle = '#ffd23a'; g.font = '800 12px sans-serif'; g.textAlign = 'left'; g.fillText(RK().ic + ' ' + RK().n, 240, 30); g.fillStyle = '#9a8fb8'; g.font = '11px sans-serif'; g.fillText('День ' + S.day + '/' + DAYS + ' · план ' + fmtR(planNow()), 240, 50);
   g.fillStyle = '#e8e0ff'; g.fillText(S.rank === 4 ? 'Сотрудников: ' + (S.staff || []).length + '/' + S.desks : 'Офис: ' + (TEAM.length - 1) + ' коллеги', 240, 70);
   ofRects = []; const pult = S.maxRank >= 4, list = pult ? (S.staff || []) : TEAM.filter(x => x.r !== S.rank).map(x => ({n: x.n, role: Math.min(3, x.r), skill: 3, loy: 60, skin: SKIN[x.r], tm: x})), cap = pult ? S.desks : 4;
   for (let i = 0; i < 12; i++) {const col = i % 4, row = Math.floor(i / 4), x = 90 + col * 180, y = 150 + row * 110, p = list[i], lock = i >= cap; ofRects.push([x - 38, y - 30, 76, 70, i]);

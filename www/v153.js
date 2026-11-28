@@ -1,0 +1,52 @@
+'use strict';
+/* v153: переключатель языка RU / EN / UA для интерфейса (меню, кнопки, HUD, задания, рейтинг, мини-игры). Диалоги клиентов остаются на русском. */
+(function () {
+  const KEY = 'cc_lang', LANGS = {ru: '🇷🇺 Русский', en: '🇬🇧 English', uk: '🇺🇦 Українська'};
+  let lang = 'ru'; try {const v = lsGet(KEY, 'ru'); if (LANGS[v]) lang = v;} catch (e) {}
+  const D = [
+    ['Новая игра+', 'New Game+', 'Нова гра+'], ['Новая игра', 'New game', 'Нова гра'], ['Начать игру', 'Start game', 'Почати гру'], ['Продолжить игру', 'Continue game', 'Продовжити гру'], ['Продолжить смену', 'Continue shift', 'Продовжити зміну'], ['Продолжить', 'Continue', 'Продовжити'],
+    ['Приступить к работе', 'Start working', 'Приступити до роботи'], ['нажмите, чтобы пропустить', 'tap to skip', 'натисніть, щоб пропустити'], ['Канал разработчика', 'Developer channel', 'Канал розробника'], ['Разработчик', 'Developer', 'Розробник'],
+    ['День', 'Day', 'День'], ['План:', 'Plan:', 'План:'], ['План', 'Plan', 'План'], ['Кофе', 'Coffee', 'Кава'], ['Обед', 'Lunch', 'Обід'], ['Перекур', 'Smoke', 'Перекур'], ['Команда', 'Team', 'Команда'], ['Меню', 'Menu', 'Меню'], ['Дом', 'Home', 'Дім'], ['Отношения', 'Dating', 'Стосунки'], ['Поездки', 'Trips', 'Поїздки'], ['Магазин', 'Shop', 'Магазин'],
+    ['Ждём звонка…', 'Waiting for a call…', 'Чекаємо дзвінка…'], ['ВЗЯТЬ ТРУБКУ', 'PICK UP', 'ВЗЯТИ СЛУХАВКУ'], ['Положить', 'Hang up', 'Покласти'], ['Предупредить', 'Warn', 'Попередити'], ['Передать специалисту', 'Pass to specialist', 'Передати спеціалісту'], ['Минутку, проверю', 'One moment, checking', 'Хвилинку, перевірю'],
+    ['Достижения', 'Achievements', 'Досягнення'], ['Настройки', 'Settings', 'Налаштування'], ['Статистика', 'Statistics', 'Статистика'], ['Навыки', 'Skills', 'Навички'], ['Моя история', 'My story', 'Моя історія'], ['Что делать?', 'What to do?', 'Що робити?'], ['Что нового', 'What\'s new', 'Що нового'], ['Как играть', 'How to play', 'Як грати'], ['Об игре', 'About', 'Про гру'],
+    ['Закрыть', 'Close', 'Закрити'], ['Назад', 'Back', 'Назад'], ['Понятно', 'Got it', 'Зрозуміло'], ['Понял', 'Got it', 'Зрозумів'], ['Принять', 'Accept', 'Прийняти'], ['Отказать', 'Decline', 'Відмовити'], ['Купить', 'Buy', 'Купити'], ['Ехать', 'Go', 'Їхати'], ['Дальше', 'Next', 'Далі'], ['Позже', 'Later', 'Пізніше'], ['Забрать', 'Take', 'Забрати'], ['Улучшить', 'Upgrade', 'Покращити'], ['Выбрать', 'Select', 'Обрати'], ['Надеть', 'Wear', 'Одягнути'], ['Снять', 'Take off', 'Зняти'],
+    ['В главное меню', 'Main menu', 'В головне меню'], ['К работе', 'Back to work', 'До роботи'], ['Вернуться к звонку', 'Back to the call', 'Повернутись до дзвінка'], ['Вернуться', 'Return', 'Повернутись'], ['Следующий день', 'Next day', 'Наступний день'], ['Подвести итоги', 'Show results', 'Підбити підсумки'], ['День окончен', 'day is over', 'день завершено'],
+    ['Совесть', 'Conscience', 'Совість'], ['Подозрения', 'Suspicion', 'Підозри'], ['Подозрение', 'Suspicion', 'Підозра'], ['Шеф', 'Boss', 'Шеф'], ['Силы', 'Energy', 'Сили'], ['Энергия', 'Energy', 'Енергія'], ['Риск', 'Risk', 'Ризик'], ['Интерес', 'Interest', 'Інтерес'], ['Комиссия', 'Commission', 'Комісія'], ['Оборот', 'Turnover', 'Оборот'],
+    ['Контакт передан', 'Contact passed', 'Контакт передано'], ['Ваша комиссия', 'Your commission', 'Ваша комісія'], ['Повторный звонок', 'Callback', 'Повторний дзвінок'], ['Извиниться и вернуть часть', 'Apologize and refund part', 'Вибачитись і повернути частину'], ['Принять благодарность', 'Accept thanks', 'Прийняти подяку'], ['Вежливо закончить', 'End politely', 'Ввічливо закінчити'],
+    ['Задания дня', 'Daily tasks', 'Завдання дня'], ['Задание выполнено', 'Task complete', 'Завдання виконано'], ['Закрыть «сделок»', 'Close deals', 'Закрити «угод»'], ['Предупредить клиентов', 'Warn clients', 'Попередити клієнтів'], ['Принять звонков', 'Take calls', 'Прийняти дзвінків'], ['Серия «сделок»', 'Deal streak', 'Серія «угод»'], ['Серия', 'Streak', 'Серія'], ['Выполнить план дня', 'Hit the daily plan', 'Виконати план дня'], ['Серия из 3 «сделок» подряд', '3 deals in a row', 'Серія з 3 «угод» поспіль'], ['Закончить день с риском ниже 40', 'End the day with risk below 40', 'Закінчити день з ризиком нижче 40'],
+    ['Эффекты дня', 'Effects of the day', 'Ефекти дня'], ['Эффекты', 'Effects', 'Ефекти'], ['Что даёт ваш дом', 'What your home gives', 'Що дає ваш дім'], ['Дом помогает', 'Home helps', 'Дім допомагає'],
+    ['ТОТАЛ офисов', 'Offices TOTAL', 'ТОТАЛ офісів'], ['ТОТАЛ', 'TOTAL', 'ТОТАЛ'], ['Мой офис', 'My office', 'Мій офіс'], ['Офисы компании', 'Company offices', 'Офіси компанії'], ['Офисы', 'Offices', 'Офіси'], ['Рейтинг', 'Ranking', 'Рейтинг'], ['Сегодня', 'Today', 'Сьогодні'], ['7 дней', '7 days', '7 днів'], ['Всё время', 'All time', 'Весь час'], ['Управляющий', 'Manager', 'Керуючий'], ['Сотрудников', 'Employees', 'Працівників'], ['Место за 7 дней', 'Rank (7 days)', 'Місце за 7 днів'], ['Выполнение плана', 'Plan completion', 'Виконання плану'], ['Место за всё время', 'Rank (all time)', 'Місце за весь час'], ['Съездить', 'Visit', 'Поїхати'], ['Карточки команды', 'Team cards', 'Картки команди'], ['Моя команда', 'My team', 'Моя команда'], ['К офису', 'To the office', 'До офісу'], ['Закрыть', 'Close', 'Закрити'],
+    ['навык', 'skill', 'навичка'], ['лояльность', 'loyalty', 'лояльність'],
+    ['Перерыв', 'Break', 'Перерва'], ['Лови звонки', 'Catch the calls', 'Лови дзвінки'], ['Ловушка в договоре', 'Contract trap', 'Пастка в договорі'], ['Набери номер', 'Dial the number', 'Набери номер'], ['Запомните номер клиента', 'Remember the client\'s number', 'Запам\'ятайте номер клієнта'], ['Наберите номер по памяти', 'Dial the number from memory', 'Наберіть номер по пам\'яті'], ['Верно!', 'Correct!', 'Вірно!'], ['рекорд', 'best', 'рекорд'], ['Премия', 'Bonus', 'Премія'], ['Пункт договора. Это ловушка?', 'Contract clause. Is it a trap?', 'Пункт договору. Це пастка?'],
+    ['Резервная копия', 'Backup', 'Резервна копія'], ['Размер текста', 'Text size', 'Розмір тексту'], ['Вибрация', 'Vibration', 'Вібрація'], ['Звук', 'Sound', 'Звук'], ['Музыка', 'Music', 'Музика'], ['Язык', 'Language', 'Мова'], ['Сложность', 'Difficulty', 'Складність'], ['Лёгкая', 'Easy', 'Легка'], ['Обычная', 'Normal', 'Звичайна'], ['Ад', 'Hell', 'Пекло'],
+    ['Гардероб', 'Wardrobe', 'Гардероб'], ['Мебель', 'Furniture', 'Меблі'], ['Транспорт', 'Transport', 'Транспорт'], ['Знакомства', 'Dating', 'Знайомства'], ['Жильцы', 'Residents', 'Мешканці'], ['Город и офисы', 'City and offices', 'Місто та офіси'], ['Крыша', 'Protection', 'Дах'], ['Должность', 'Position', 'Посада'], ['Иерархия', 'Hierarchy', 'Ієрархія'], ['Вечер', 'Evening', 'Вечір'],
+    ['Пенсионерка', 'Pensioner', 'Пенсіонерка'], ['Студент', 'Student', 'Студент'], ['Россия', 'Russia', 'Росія'], ['Лесной', 'Lesnoy', 'Лісовий'],
+    ['Лесной: что делать?', 'Lesnoy: what to do?', 'Лісовий: що робити?'], ['Кто-то из клиентов ещё перезвонит', 'Some client will call back', 'Хтось із клієнтів ще передзвонить'],
+    ['День ', 'Day ', 'День '], ['-е из', ' of', ' з'], ['очк.', 'pts', 'очк.'], ['Хорошо', 'Good', 'Добре'], ['Отлично', 'Great', 'Чудово'], ['Игра', 'Game', 'Гра'], ['Сохранено', 'Saved', 'Збережено']
+  ];
+  const IDX = {en: 1, uk: 2}, esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), CYR = '[А-Яа-яЁё]';
+  const ENT = D.slice().sort((a, b) => b[0].length - a[0].length).map(r => ({re: new RegExp('(?<!' + CYR + ')' + esc(r[0].trim()) + '(?!' + CYR + ')', 'g'), t: r}));
+  const tr = s => {if (lang === 'ru') return s; const i = IDX[lang]; let o = s; for (const e of ENT) if (e.re.test(o)) {e.re.lastIndex = 0; o = o.replace(e.re, e.t[i]);} else e.re.lastIndex = 0; return o;};
+  const HAS = /[А-Яа-яЁё]/;
+  function fix(n) {
+    if (n.nodeType === 3) {
+      if (n.parentElement && n.parentElement.closest('.langbox')) return;
+      if (n._o === undefined) {if (!HAS.test(n.data)) return; n._o = n.data; n._v = n.data;} else if (n.data !== n._v) {if (!HAS.test(n.data)) {n._o = undefined; return;} n._o = n.data;}
+      const v = tr(n._o); if (n.data !== v) n.data = v; n._v = n.data; return;
+    }
+    if (n.nodeType === 1 && n.tagName !== 'SCRIPT' && n.tagName !== 'STYLE') {for (let c = n.firstChild; c; c = c.nextSibling) fix(c);}
+  }
+  let pend = 0, mo = null, q = new Set();
+  const OPT = {childList: true, subtree: true, characterData: true};
+  function flush() {pend = 0; if (lang === 'ru') {q.clear(); return;} const items = Array.from(q); q.clear(); if (mo) mo.disconnect(); try {items.forEach(n => {if (n.isConnected) fix(n);});} catch (e) {} if (mo) mo.observe(document.body, OPT);}
+  function watch() {if (!mo) mo = new MutationObserver(recs => {if (lang === 'ru') return; for (const r of recs) {if (r.type === 'characterData') q.add(r.target); else r.addedNodes.forEach(n => q.add(n));} if (!pend) pend = setTimeout(flush, 90);}); mo.observe(document.body, OPT);}
+  function setLang(l) {lang = l; try {lsSet(KEY, l);} catch (e) {} document.documentElement.lang = l === 'uk' ? 'uk' : l; if (mo) mo.disconnect(); fix(document.body); watch();}
+  watch();
+  /* выбор языка в настройках */
+  const _ss = typeof scrSettings === 'function' ? scrSettings : null;
+  const inject = () => {const box = document.querySelector('#scr .box'); if (!box || box.querySelector('.langbox')) return; const h2 = box.querySelector('h2'); if (!h2 || !/Настройк|Settings|Налаштув/.test(h2.textContent)) return;
+    h2.insertAdjacentHTML('afterend', '<div class="langbox row" style="margin:6px 0"><span style="flex:1 0 100%;color:#9a8fb8;font-size:12.5px">🌐 Язык интерфейса / Language / Мова</span>' + Object.keys(LANGS).map(k => '<button class="btn sm' + (k === lang ? ' pri' : '') + '" data-a="lang_set" data-v="' + k + '">' + LANGS[k] + '</button>').join('') + '<span style="flex:1 0 100%;color:#9a8fb8;font-size:11.5px">Переведён интерфейс; диалоги клиентов пока на русском. / Interface only; client dialogues stay in Russian. / Лише інтерфейс; діалоги клієнтів поки російською.</span></div>');};
+  new MutationObserver(() => {try {inject();} catch (e) {}}).observe(document.body, {childList: true, subtree: true});
+  document.addEventListener('click', e => {const b = e.target.closest('[data-a="lang_set"]'); if (!b) return; e.preventDefault(); e.stopImmediatePropagation(); setLang(b.dataset.v); const bx = document.querySelector('#scr .langbox'); if (bx) bx.querySelectorAll('button').forEach(x => x.classList.toggle('pri', x.dataset.v === lang));}, true);
+  window.__lang = () => lang; window.__setLang = setLang; window.__tr = tr;
+})();

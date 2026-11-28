@@ -77,10 +77,28 @@ const Snd = (() => {
   let ambT = 0;
   function amb() {if (!ac || !on || sv <= 0 || ac.currentTime < ambT) return; ambT = ac.currentTime + 1.2 + Math.random() * 2.5; const t = ac.currentTime; noise(t, .5 + Math.random() * .6, .035, sG, 'bandpass', 350 + Math.random() * 400, 250); if (Math.random() < .12) {osc(t + .1, 1300, .08, 'square', .02, sG); osc(t + .3, 1300, .08, 'square', .02, sG);} if (Math.random() < .35) noise(t + .2, .03, .05, sG, 'highpass', 4000); if (Math.random() < .08) for (let i = 0; i < 8; i++) noise(t + i * .07, .05, .035, sG, 'bandpass', 900, 500); if (Math.random() < .07) osc(t, 1800, .08, 'sine', .035, sG, 2600); if (Math.random() < .06) noise(t, .12, .06, sG, 'lowpass', 500, 120); if (Math.random() < .08) sfx('phone'); if (Math.random() < .05) sfx('tick'); if (Math.random() < .05) sfx('paper');}
   function sched() {amb();
-    if (!ac || !on || ac.state !== 'running' || mv <= 0) return; const sd = 60 / 78 / 4;
+    if (!ac || !on || ac.state !== 'running' || mv <= 0) return; const sd = 60 / ({panic: 132, tense: 86, night: 62}[mood] || 78) / 4;
     while (nextT < ac.currentTime + .25) {note(step, nextT); nextT += sd; step++;}
   }
   function note(s, t) {
+    if (mood === 'panic') {
+      const bar = (s >> 4) & 3, st = s & 15, root = [57, 56, 55, 56][bar], o = mG;
+      if (st % 4 === 0) osc(t, 120, .12, 'sine', .4, o, 42);
+      if (st % 2 === 1) noise(t, .02, .05, o, 'highpass', 8000);
+      if (st === 4 || st === 12) noise(t, .1, .16, o, 'bandpass', 2000, 900);
+      if (st === 0 || st === 6 || st === 10) {osc(t, hz(root + 12), .16, 'sawtooth', .05, o); osc(t, hz(root + 18), .16, 'sawtooth', .035, o);}
+      const m2 = [0, 6, 7, 6, 0, 3, 6, 7][st >> 1]; if (st % 2 === 0) osc(t, hz(root + 24 + m2), .1, 'square', .03, o);
+      if (st === 0) osc(t, hz(root - 12), 1, 'sawtooth', .09, o);
+      return;
+    }
+    if (mood === 'night') {
+      const bar = (s >> 4) & 3, st = s & 15, root = [57, 53, 55, 52][bar] - 12, o = mG;
+      if (st === 0) {[0, 4, 7, 11].forEach(k => osc(t, hz(root + 12 + k), 3.2, 'sine', .045, o)); osc(t, hz(root - 12), 3.4, 'sine', .16, o);}
+      if (st === 0 || st === 10) osc(t, 100, .2, 'sine', .15, o, 50);
+      const bl = [-1, 12, -1, -1, 7, -1, -1, 16, -1, 14, -1, -1, -1, 11, -1, -1][st]; if (bl >= 0 && bar % 2 === 0) {osc(t, hz(root + 24 + bl), 1.1, 'sine', .05, o); osc(t, hz(root + 36 + bl), .5, 'sine', .015, o);}
+      if (st === 8) noise(t, .6, .02, o, 'lowpass', 500, 200);
+      return;
+    }
     const bar = (s >> 4) & 3, st = s & 15, root = [57, 53, 55, 52][bar] - (mood === 'tense' ? 2 : 0), o = mG, ch = [0, 3, 7, 10];
     if (st === 0) ch.forEach((k, i) => osc(t, hz(root + 12 + k), 3.4, 'triangle', .05, o)), osc(t, hz(root - 12), 3.6, 'sine', .2, o);
     if (st === 0 || st === 8) osc(t, 110, .14, 'sine', .35, o, 45);

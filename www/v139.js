@@ -41,10 +41,10 @@
     if (!S || S.mode === 'ending') {lastS = null; return;}
     const D = DIFF[S.diff || 'norm'] || DIFF.norm, L = S.ngl || 0;
     if (lastS !== S) {lastS = S; lv = {heat: S.heat, cons: S.cons, boss: S.boss};}
-    const ramp = S.day <= 3 ? .55 : S.day <= 6 ? .75 : S.day <= 10 ? .9 : 1, hu = D.hu * (1 + .08 * L) * (S.diff === 'hell' ? 1 : ramp);
+    const ramp = S.day <= 3 ? .55 : S.day <= 6 ? .75 : S.day <= 10 ? .9 : 1, pk = id => (window.__pk ? window.__pk(id) : 0), hu = Math.max(.3, D.hu * (1 + .08 * L) * (S.diff === 'hell' ? 1 : ramp) * (1 - .1 * pk('thick')));
     let d = S.heat - lv.heat; if (d > .01 && Math.abs(hu - 1) > .001) S.heat = clamp(S.heat + d * (hu - 1), 0, 100);
-    d = S.cons - lv.cons; if (d < -.01 && D.cd !== 1) S.cons = clamp(S.cons + d * (D.cd - 1), 0, 100);
-    d = S.boss - lv.boss; if (d < -.01 && D.bd !== 1) S.boss = clamp(S.boss + d * (D.bd - 1), 0, 100);
+    d = S.cons - lv.cons; if (d < -.01) {const m = D.cd * (1 - .12 * pk('cons')); if (Math.abs(m - 1) > .001) S.cons = clamp(S.cons + d * (m - 1), 0, 100);}
+    d = S.boss - lv.boss; if (d < -.01) {const m = D.bd * (1 - .12 * pk('boss')); if (Math.abs(m - 1) > .001) S.boss = clamp(S.boss + d * (m - 1), 0, 100);}
     lv = {heat: S.heat, cons: S.cons, boss: S.boss};
   }, 200);
 
